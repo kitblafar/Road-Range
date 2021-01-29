@@ -11,9 +11,10 @@
     let arduinoData = {
         type: 'line',
         data: {
-            labels: [], //put time in here
+            labels: new Array(100).fill(0), //put time in here
             datasets: [{
-                data: [], //put arduino data in here
+                data: new Array(100).fill(0),
+            //put arduino data in here
                 label: "Arduino-Data",
             },
             ],
@@ -45,6 +46,7 @@
                 //add data to the arduinodata.data array and the time to the label array
                 let time = Date.now() - startTime;
                 this.addData(Chart1, time, event.data);
+                this.removeData(Chart1);
             });
         },
         methods: {
@@ -66,6 +68,13 @@
                 chart.data.labels.push(label);
                 chart.data.datasets.forEach((dataset) => {
                     dataset.data.push(data);
+                });
+                chart.update();
+            },
+            removeData(chart) {
+                chart.data.labels.shift();
+                chart.data.datasets.forEach((dataset) => {
+                    dataset.data.shift(); //shift takes from the left
                 });
                 chart.update();
             }
