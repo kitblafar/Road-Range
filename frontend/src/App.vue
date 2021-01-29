@@ -1,6 +1,7 @@
 <template>
     <div id="app">
-        chart
+        <div class="top-left"><img src="./assets/logo.svg"></div>
+        <h3>Live Slip Data Graph</h3>
         <Plotter/>
     </div>
 </template>
@@ -25,5 +26,10 @@
         text-align: center;
         color: #2c3e50;
         margin-top: 60px;
+    }
+    .top-left {
+        position: absolute;
+        top: 8px;
+        left: 16px;
     }
 </style>
