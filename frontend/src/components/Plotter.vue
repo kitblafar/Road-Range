@@ -11,8 +11,6 @@
     let arduinoData = {
         type: 'line',
         data: {
-            yAxisID: "Number",
-            xAxisID: "Time (ms)",
             labels: new Array(100).fill(0), //put time in here
             datasets: [{
                 data: new Array(100).fill(0),
@@ -24,7 +22,9 @@
         },
 
         options: {
-
+            animation: {
+                duration: 0
+            },
             scales: {
                 yAxes: [{
                     scaleLabel: {
@@ -75,14 +75,14 @@
                 return (myChart); //make the chart accessible everywhere
             },
             addData(chart, label, data) {
-                //remove data from the end
+                //remove x-axis from start
                 chart.data.labels.shift();
-                //add data
+                //add x-axis to end
                 chart.data.labels.push(label);
-                chart.data.datasets.forEach((dataset) => {
-                    dataset.data.shift(); //shift takes from the left
-                    dataset.data.push(data);
-                });
+                //chart.data.datasets.forEach((dataset) => { //use this when plotting multiple graphs on same axis
+                chart.data.datasets[0].data.shift(); //take data from start
+                chart.data.datasets[0].data.push(data); //add data to end
+                //});
                 chart.update();
             },
 

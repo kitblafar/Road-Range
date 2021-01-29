@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <div class="top-left"><img src="./assets/logo.svg"></div>
-        <h3>Live Slip Data Graph</h3>
+        <div class="title">Live Slip Data Graph</div>
         <Plotter/>
     </div>
 </template>
@@ -27,9 +27,17 @@
         color: #2c3e50;
         margin-top: 60px;
     }
+
     .top-left {
         position: absolute;
         top: 8px;
         left: 16px;
+    }
+
+    .title {
+        position: center;
+        font-size: x-large;
+        font-weight: bolder;
+        color: rgba(19, 17, 123, 1);
     }
 </style>
