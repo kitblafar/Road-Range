@@ -5,8 +5,10 @@
 <script>
     import Chart from 'chart.js';
     // Create WebSocket connection.
-    const socket = new WebSocket('ws://localhost:1999');
+    let socket = new WebSocket('ws://localhost:1999');
     const startTime = Date.now();
+    import {bus} from '../main';
+
 
     let arduinoData = {
         type: 'line',
@@ -49,6 +51,7 @@
 
         name: "Plotter",
         mounted() {
+            bus.$on('changeItOff', this.closingWebSocket);
             let Chart1 = this.createChart('sensor-chart', arduinoData);
             console.log("chart created");
             // Listen for messages
@@ -85,9 +88,11 @@
                 //});
                 chart.update();
             },
-
+            closingWebSocket() {
+                socket.close();
+                console.log("I am closing Websocket");
+            },
         },
-
     }
 
 

@@ -6,16 +6,18 @@ let fs = require('fs');
 let http = require('http');
 let url = require('url');
 let path = require('path');
-let _= require('underscore');
+let _ = require('underscore');
 
+
+let startTime = Date.now();
 
 //name CSV file (must have no :,- in)
 let pathName = './StoredData/' // where the file will go
-var date= new Date().toISOString();
+var date = new Date().toISOString();
 var res1 = date.replace(/:/g, "-");
 var res2 = res1.replace(/\./g, "-");
-var res3= res2.replace(/Z/g, "");
-var fileName= (pathName + "output-" + res3+ ".csv")
+var res3 = res2.replace(/Z/g, "");
+var fileName = (pathName + "output-" + res3 + ".csv")
 //console.log(fileName);
 
 //open port
@@ -40,7 +42,6 @@ sensorPort.on('close', showPortClose);
 sensorPort.on('error', showError);
 //web socket function
 wss.on('connection', handleConnection);
-
 //functions to check data is being received
 //Baud rate and port should be the same as the arduino
 function showPortOpen() {
@@ -53,11 +54,12 @@ function broadcastAndWrite(data) {
     if (connections.length > 0) {
         broadcast(data);
     }
+    let CSVData = `${Date.now() - startTime},${data}`
     //writing sensor data to csv file (where is can be stored for later graphing)
-   fs.appendFile(fileName, data, function (err) {
-       if (err) return console.log(err);
-       console.log('data written to file-' + fileName);
-   });
+    fs.appendFile(fileName, CSVData, function (err) {
+        if (err) return console.log(err);
+        //console.log('data written to file-' + fileName);
+    });
 
 }
 
@@ -73,12 +75,13 @@ function showError(error) {
 function handleConnection(client) {
     console.log("New Connection"); // new client has connected
     connections.push(client); // add this client to the connections array
-    client.on('close', function() { // client has closed their connection
+    client.on('close', function () { // client has closed their connection
         console.log("connection closed");
         let position = connections.indexOf(client); // get the client's position in the array
         connections.splice(position, 1); // and delete it from the array
     });
 }
+
 // broadcasting sensor data to all webSocket clients
 function broadcast(data) {
     for (myConnection in connections) {   //  go through the array of connections
@@ -86,21 +89,35 @@ function broadcast(data) {
     }
 }
 
+//headers to prevent CORS error
+const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
+    "Access-Control-Max-Age": 2592000, // 30 days
+    /** add other headers too */
+};
 //creating the server
 http.createServer(function (req, res) {
-    fs.readFile(__dirname+"/StoredData/" + getMostRecentFileName(__dirname+"/StoredData"), function (err,data) {
+    if (req.method === "OPTIONS") {
+        res.writeHead(204, headers);
+        res.end();
+        return;
+    }
+    fs.readFile(__dirname + "/StoredData/" + getMostRecentFileName(__dirname + "/StoredData"), function (err, data) {
         if (err) {
             res.writeHead(404);
             res.end(JSON.stringify(err));
             return;
         }
-        res.writeHead(200);
+        res.writeHead(200, {
+            'Content-Type': 'text/csv'
+        });
         res.end(data);
+        console.log(data);
     });
-}).listen(8080);
+}).listen(9000);
 
-//find the newest data file
-// Return only base file name without dir
+//find the newest data file N.B. Return only base file name without dir
 function getMostRecentFileName(dir) {
     var files = fs.readdirSync(dir);
 

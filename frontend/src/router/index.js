@@ -15,7 +15,7 @@ export default new Router({
         {
             path: '/Saved',
             name: 'Saved',
-            component: SavedPage
+            component: SavedPage,
         },
     ]
 })
