@@ -2,6 +2,12 @@
 let ArduinoPort = require('serialport');
 let WebSocket = require('ws').Server;
 let fs = require('fs');
+//for web request
+let http = require('http');
+let url = require('url');
+let path = require('path');
+let _= require('underscore');
+
 
 //name CSV file (must have no :,- in)
 let pathName = './StoredData/' // where the file will go
@@ -9,7 +15,7 @@ var date= new Date().toISOString();
 var res1 = date.replace(/:/g, "-");
 var res2 = res1.replace(/\./g, "-");
 var res3= res2.replace(/Z/g, "");
-var fileName= (pathName + "output-" + res3)
+var fileName= (pathName + "output-" + res3+ ".csv")
 //console.log(fileName);
 
 //open port
@@ -80,3 +86,30 @@ function broadcast(data) {
     }
 }
 
+//creating the server
+http.createServer(function (req, res) {
+    fs.readFile(__dirname+"/StoredData/" + getMostRecentFileName(__dirname+"/StoredData"), function (err,data) {
+        if (err) {
+            res.writeHead(404);
+            res.end(JSON.stringify(err));
+            return;
+        }
+        res.writeHead(200);
+        res.end(data);
+    });
+}).listen(8080);
+
+//find the newest data file
+// Return only base file name without dir
+function getMostRecentFileName(dir) {
+    var files = fs.readdirSync(dir);
+
+    // use underscore for max()
+    return _.max(files, function (f) {
+        var fullpath = path.join(dir, f);
+
+        // ctime = creation time is used
+        // replace with mtime for modification time
+        return fs.statSync(fullpath).ctime;
+    });
+}
