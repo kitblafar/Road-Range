@@ -1,18 +1,20 @@
 <template>
     <div id="app">
         <div class="top-left"><img src="./assets/logo.svg"></div>
-        <div class="title">Live Slip Data Graph</div>
-        <Plotter/>
+        <LivePage/>
+        <SavedPage/>
     </div>
 </template>
 
 <script>
-    import Plotter from './components/Plotter.vue'
+    import LivePage from './components/LivePage.vue';
+    import SavedPage from './components/SavedPage';
 
     export default {
         name: 'App',
         components: {
-            Plotter
+            LivePage,
+            SavedPage,
         },
     }
 
@@ -34,10 +36,5 @@
         left: 16px;
     }
 
-    .title {
-        position: center;
-        font-size: x-large;
-        font-weight: bolder;
-        color: rgba(19, 17, 123, 1);
-    }
+
 </style>
