@@ -47,28 +47,21 @@
 
         name: "Plotter",
 
-         mounted() {
-             let data = this.getCSV();
+         async mounted() {
+             let data = await this.getCSV();
              let Chart1 = this.createChart('sensor-chart', arduinoData);
-             console.log(data)
-             data.split("\n").forEach((element) => {
+             //console.log(data)
+             data.split(/\r\n|\r|\n/).forEach((element) => {
                  let splitted = element.split(",")
                  let xdata = splitted[0];
                  let ydata = splitted[1];
-                 console.log(ydata);
+                 //console.log(ydata);
                  this.addData(Chart1, xdata, ydata)
              });
          },
 
         methods: {
-            async getCSV() {
-                const res = await fetch(' http://localhost:9000/request', {
-                    mode: "no-cors",
-                });
-                const data = await res.text();
-                console.log(data)
-                return data;
-            },
+
 
             createChart(chartId, chartData) {
                 const ctx = document.getElementById(chartId);
@@ -87,8 +80,16 @@
                 //});
                 chart.update();
             },
+            async getCSV() {
+                const res = await fetch(' http://localhost:9000/request', {
+                });
+                const data = await res.text();
+                console.log(data)
+                return data;
+            },
 
         },
+
 
     }
 

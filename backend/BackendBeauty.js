@@ -40,8 +40,10 @@ sensorPort.on('open', showPortOpen);
 parser.on('data', broadcastAndWrite); //broadcast data and write to CSV
 sensorPort.on('close', showPortClose);
 sensorPort.on('error', showError);
+
 //web socket function
 wss.on('connection', handleConnection);
+
 //functions to check data is being received
 //Baud rate and port should be the same as the arduino
 function showPortOpen() {
@@ -54,12 +56,13 @@ function broadcastAndWrite(data) {
     if (connections.length > 0) {
         broadcast(data);
     }
-    let CSVData = `${Date.now() - startTime},${data}`
+         let CSVData = `${Date.now() - startTime},${data}`
     //writing sensor data to csv file (where is can be stored for later graphing)
     fs.appendFile(fileName, CSVData, function (err) {
         if (err) return console.log(err);
         //console.log('data written to file-' + fileName);
     });
+
 
 }
 
@@ -94,7 +97,7 @@ const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
     "Access-Control-Max-Age": 2592000, // 30 days
-    /** add other headers too */
+    "Content-Type": 'text/csv'
 };
 //creating the server
 http.createServer(function (req, res) {
@@ -109,9 +112,7 @@ http.createServer(function (req, res) {
             res.end(JSON.stringify(err));
             return;
         }
-        res.writeHead(200, {
-            'Content-Type': 'text/csv'
-        });
+        res.writeHead(200, headers);
         res.end(data);
         console.log(data);
     });
