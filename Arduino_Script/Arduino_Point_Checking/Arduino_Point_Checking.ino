@@ -1,16 +1,28 @@
-long randNumber;
 
 void setup() {
   Serial.begin(9600);
 }
 
 void loop() {
-  // print a ramp of numers going up and down
-  for (int y=-2; y<=2 ; y++){
-  for (int x=1; x<10; x++){
-    randNumber=x*y;
-  Serial.println(randNumber);
-  }}
+
+ 
+ Serial.println(1);
+  delay(50);
+ Serial.println(2);
+  delay(50);
+ Serial.println(3);
+  delay(50);
+ Serial.println(4);
+  delay(50);
+ Serial.println(5);
+  delay(50);
+ Serial.println(4);
+  delay(50);
+ Serial.println(3);
+  delay(50);
+ Serial.println(2);
+  delay(50);
+ Serial.println(1);
 
   delay(50);
 }

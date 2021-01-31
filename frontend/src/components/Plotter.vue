@@ -7,7 +7,7 @@
     // Create WebSocket connection.
     let socket = new WebSocket('ws://localhost:1999');
     const startTime = Date.now();
-    import {bus} from '../main';
+    import {bus} from '@/main';
 
 
     let arduinoData = {
