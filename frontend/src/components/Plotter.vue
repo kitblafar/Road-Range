@@ -24,6 +24,7 @@
         },
 
         options: {
+            responsive:true,
             animation: {
                 duration: 0
             },
@@ -99,8 +100,5 @@
 </script>
 
 <style scoped>
-#sensor-chart{
-    position: absolute;
-    top: 50px;
-}
+
 </style>
