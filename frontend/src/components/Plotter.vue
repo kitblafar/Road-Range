@@ -99,5 +99,8 @@
 </script>
 
 <style scoped>
-
+#sensor-chart{
+    position: absolute;
+    top: 50px;
+}
 </style>
