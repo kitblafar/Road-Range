@@ -1,5 +1,5 @@
 <template>
-    <canvas id="sensor-chart" width="600" height="300"></canvas>
+    <canvas id="sensor-chart" width="600" height="250"></canvas>
 </template>
 
 <script>
@@ -123,6 +123,7 @@
                     console.log("here is each section: "+ section);
                     splitted.push(section);
                 });
+
                 console.log("This is the split array: "+splitted)
                 let xdata = splitted[0];
                 let ydata = [splitted[1],splitted[2],splitted[3],splitted[4]];
@@ -130,6 +131,10 @@
                 this.addData(Chart1, xdata, ydata);
                 splitted=[];
             });
+        },
+        beforeDestroy(){
+            this.removeData(arduinoData);
+            console.log("unmounted");
         },
 
         methods: {
@@ -142,6 +147,12 @@
                     options: chartData.options,
                 });
                 return (myChart); //make the chart accessible everywhere
+            },
+            removeData(data){
+                data.data.labels=[];
+                data.data.datasets.forEach((dataset) => {
+                    dataset.data=[];
+                })
             },
             addData(chart, label, data) {
                 //add x-axis to end

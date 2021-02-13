@@ -3,7 +3,7 @@
         <div class="top-left"><img src="./assets/logo.svg" alt="oops"></div>
         <div class="warning">Clicking saved data pauses live-data: <br>To restart live-data click refresh</div>
         <button class="button1">
-        <router-link :to="{ name: 'Live' }">Live Data Plot</router-link>
+        <router-link :to="{ name: 'Live' }" >Live Data Plot</router-link>
         </button>
         <h1>        </h1>
         <button class="button2">
@@ -22,7 +22,7 @@
             globalPageChangeOff() {
                 bus.$emit('changeItOff', 'changed page off');
                 //console.log("hello");
-            }
+            },
         }
     }
 

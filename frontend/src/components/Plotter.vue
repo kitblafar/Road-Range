@@ -1,5 +1,5 @@
 <template>
-    <canvas id="sensor-chart"></canvas>
+    <canvas id="sensor-chart" width="600" height="250"></canvas>
 </template>
 
 <script>
@@ -63,6 +63,7 @@
                 this.addData(Chart1, time, event.data);
             });
         },
+
         methods: {
             data() {
                 return {
