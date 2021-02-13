@@ -22,7 +22,7 @@ var fileName = (pathName + "output-" + res3 + ".csv")
 
 //open port
 let portName = process.argv[2]; //usually COM3
-let sensorPort = new ArduinoPort(portName, 9600); //set arduino baud rate to 9600
+var sensorPort = new ArduinoPort(portName, 9600); //set arduino baud rate to 9600
 
 //creating ASCII encoded data
 let readLine = ArduinoPort.parsers.Readline; // make instance of Readline parser
@@ -36,11 +36,8 @@ let connections = new Array;          // list of connections to the server
 
 //calling functions
 //serial functions
-
 sensorPort.on('open', showPortOpen);
-
-parser.on('data', sendToBroadcast); //broadcast data and write to CSV
-parser.on('data', writeToCSV);
+parser.on('data', broadcastAndWrite); //broadcast data and write to CSV
 sensorPort.on('close', showPortClose);
 sensorPort.on('error', showError);
 
@@ -49,28 +46,27 @@ wss.on('connection', handleConnection);
 
 //functions to check data is being received
 //Baud rate and port should be the same as the arduino
-
 function showPortOpen() {
     console.log('port open. Data rate: ' + sensorPort.baudRate);
 }
 
-function sendToBroadcast(data) {
+function broadcastAndWrite(data) {
     //console.log(data); //can be used to check data recieved
     // broadcast data to all webSocket clients
     if (connections.length > 0) {
         broadcast(data);
     }
-}
-
-function writeToCSV(data) {
-    let CSVData = `${Date.now() - startTime},${data}`
-//writing sensor data to csv file (where is can be stored for later graphing)
+    //Use the bellow function to write data directly to CSV file (but will use drag and drop instead)
+    /* let CSVData = `${Date.now() - startTime},${data}`
+    //writing sensor data to csv file (where is can be stored for later graphing)
     fs.appendFile(fileName, CSVData, function (err) {
         if (err) return console.log(err);
         //console.log('data written to file-' + fileName);
     });
-}
+    */
 
+
+}
 
 function showPortClose() {
     console.log('port closed.');
@@ -112,7 +108,7 @@ http.createServer(function (req, res) {
         res.end();
         return;
     }
-    fs.readFile(__dirname + "/StoredData/" + getMostRecentFileName(__dirname + "/StoredData"), function (err, data) {
+    fs.readFile(__dirname + "/DataGoesHere/Test_Data.csv", function (err, data) {
         if (err) {
             res.writeHead(404);
             res.end(JSON.stringify(err));
@@ -124,6 +120,8 @@ http.createServer(function (req, res) {
     });
 }).listen(9000);
 
+/*
+//Returns the most recent file when names with current time
 //find the newest data file N.B. Return only base file name without dir
 function getMostRecentFileName(dir) {
     var files = fs.readdirSync(dir);
@@ -137,3 +135,4 @@ function getMostRecentFileName(dir) {
         return fs.statSync(fullpath).ctime;
     });
 }
+ */
