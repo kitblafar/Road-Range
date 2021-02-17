@@ -1,7 +1,7 @@
 <template>
     <div id="Saved-Page">
         <div class="title">Plotting Saved Values</div>
-        <PlotterSaved/>
+        <PlotterSaved class="plotter"/>
     </div>
 </template>
 
@@ -17,19 +17,16 @@
 
 <style scoped>
     .title {
-        position: center;
-        top: 100px;
-        font-size: x-large;
-        font-weight: bolder;
-        color: rgba(19, 17, 123, 1);
+      position: relative;
+      top: 20px;
+      font-size: x-large;
+      font-weight: bolder;
+      color: rgba(19, 17, 123, 1);
     }
-    #Saved-Page{
-        font-family: Avenir, Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        margin-top: 60px;
+
+    .plotter {
+      position: relative;
+      top: 40px;
     }
 
 </style>

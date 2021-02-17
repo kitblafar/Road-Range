@@ -3,17 +3,17 @@
 
     <nav class="navbar">
       <li>
-      <img src="../assets/logo.png" alt="UoN logo" height="70"/>
+        <img src="../assets/logo.png" class="logo" alt="UoN logo" height="70"/>
       </li>
       <li>
-    <router-link class="link" :to="{ name: 'Live' }">
-      Live Data Plot
-    </router-link>
+        <router-link class="link" :to="{ name: 'Live' }">
+          Live Data Plot
+        </router-link>
       </li>
       <li>
-    <router-link class="link" to="/Saved" >
-      Saved Data Plot
-    </router-link>
+        <router-link class="link" to="/Saved">
+          Saved Data Plot
+        </router-link>
       </li>
     </nav>
 
@@ -29,20 +29,25 @@ export default {
 
 <style scoped>
 
-.link{
+.link {
   display: block;
   color: white;
   text-align: center;
   font-size: x-large;
   font-weight: bold;
-  padding: 20px 30px;
+  padding: 30px 30px;
   text-decoration: none;
 }
 
-.link:hover{
+.link:hover {
   background-color: rgba(19, 17, 123, 1);
 }
-.navbar{
+
+.logo {
+  padding: 10px 10px;
+}
+
+.navbar {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -53,7 +58,6 @@ export default {
 li {
   float: left;
 }
-
 
 
 </style>
