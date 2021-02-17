@@ -106,6 +106,5 @@
 
 <style scoped>
  #sensor-chart{
-   position: center;
  }
 </style>
