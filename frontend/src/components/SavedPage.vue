@@ -18,6 +18,7 @@
 <style scoped>
     .title {
         position: center;
+        top: 100px;
         font-size: x-large;
         font-weight: bolder;
         color: rgba(19, 17, 123, 1);

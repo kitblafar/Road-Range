@@ -112,22 +112,22 @@
 
         async mounted() {
             let data = await this.getCSV();
-            console.log("gets to mounted"+ data);
+            console.log("gets to mounted");
             let Chart1 = this.createChart('sensor-chart', arduinoData);
             console.log("gets to chart");
             let splitted=[];
 
             data.split(/\r\n|\r|\n/).forEach((element) => {
-                console.log("here is each element: "+ element);
+                //console.log("here is each element: "+ element);
                 element.split(/,/).forEach((section) => {
-                    console.log("here is each section: "+ section);
+                    //console.log("here is each section: "+ section);
                     splitted.push(section);
                 });
 
-                console.log("This is the split array: "+splitted)
+                //console.log("This is the split array: "+splitted)
                 let xdata = splitted[0];
                 let ydata = [splitted[1],splitted[2],splitted[3],splitted[4]];
-                console.log("Here are y values "+ydata)
+               //console.log("Here are y values "+ydata)
                 this.addData(Chart1, xdata, ydata);
                 splitted=[];
             });
@@ -155,10 +155,10 @@
                 })
             },
             addData(chart, label, data) {
-                //add x-axis to end
-                console.log("The label is: "+label)
+              //add x-axis to end
+              // console.log("The label is: "+label)
                 chart.data.labels.push(label);
-                console.log("x-data is in graph")
+              //console.log("x-data is in graph")
                 let x=0
                 chart.data.datasets.forEach((dataset) => { //use this when plotting multiple graphs on same axis
                 dataset.data.push(data[x]); //add data to end
@@ -168,7 +168,7 @@
                 chart.update();
             },
             async getCSV() {
-                const res = await fetch(' http://localhost:9000/request', {});
+                const res = await fetch(' http://localhost:1000/request', {});
                 const data = await res.text();
                 //console.log(data)
                 return data;

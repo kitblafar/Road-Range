@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <div class="top-left"><img src="./assets/logo.svg" alt="oops"></div>
-        <div class="warning">Clicking saved data pauses live-data: <br>To restart live-data click refresh</div>
+        <div class="warning">Formula Student <br>    </div>
         <button class="button1">
         <router-link :to="{ name: 'Live' }" >Live Data Plot</router-link>
         </button>

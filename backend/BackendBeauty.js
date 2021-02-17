@@ -30,7 +30,7 @@ let parser = new readLine(); // make a new parser to read ASCII lines
 sensorPort.pipe(parser); // pipe the serial stream to the parser
 
 //config websocket
-const SERVER_PORT = 1999;               // websocket server port number
+const SERVER_PORT = 4200;               // websocket server port number
 let wss = new WebSocket({port: SERVER_PORT}); // the webSocket server
 let connections = new Array;          // list of connections to the server
 
@@ -118,7 +118,7 @@ http.createServer(function (req, res) {
         res.end(data);
         console.log(data);
     });
-}).listen(9000);
+}).listen(1000);
 
 /*
 //Returns the most recent file when names with current time

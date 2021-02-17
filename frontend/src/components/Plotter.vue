@@ -5,9 +5,9 @@
 <script>
     import Chart from 'chart.js';
     // Create WebSocket connection.
-    let socket = new WebSocket('ws://localhost:1999');
+
     const startTime = Date.now();
-    import {bus} from '@/main';
+    // import {bus} from '@/main';
 
 
     let arduinoData = {
@@ -52,19 +52,23 @@
 
         name: "Plotter",
         mounted() {
-            bus.$on('changeItOff', this.closingWebSocket);
+            this.socket = new WebSocket('ws://localhost:4200'); //reopen websocket
             let Chart1 = this.createChart('sensor-chart', arduinoData);
             console.log("chart created");
             // Listen for messages
-            socket.addEventListener('message', (event) => {
-                console.log('Message from server ', event.data);
+            this.socket.addEventListener('message', (event) => {
+               // console.log('Message from server ', event.data);
                 //add data to the arduinodata.data array and the time to the label array
                 let time = Date.now() - startTime;
                 this.addData(Chart1, time, event.data);
             });
         },
 
-        methods: {
+        beforeDestroy() { //close the websocket so it can be reopened
+          this.closingWebSocket()
+        },
+
+      methods: {
             data() {
                 return {
                     arduinoData: arduinoData,
@@ -91,7 +95,7 @@
                 chart.update();
             },
             closingWebSocket() {
-                socket.close();
+                this.socket.close();
                 console.log("I am closing Websocket");
             },
         },
@@ -101,5 +105,7 @@
 </script>
 
 <style scoped>
-
+ #sensor-chart{
+   position: center;
+ }
 </style>
