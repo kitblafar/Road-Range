@@ -1,7 +1,7 @@
 <template>
     <div id="Saved-Page">
-        <div class="title">Plotting Saved Values</div>
         <CustomSelect/>
+        <div class="title">Plotting Saved Values</div>
         <PlotterSaved class="plotter"></PlotterSaved>
     </div>
 </template>
