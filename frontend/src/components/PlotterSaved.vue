@@ -141,10 +141,10 @@
             });
 
             //finalise
-            bus.$on("Submitted ", () => {
-                //console.log(this.indexArray[0][0]);
-                //console.log(this.yAxisArray[0][1]);
+            bus.$on("Submitted ", (submitted)=> {
                 this.splitData(this.data);
+               // this.addYAxisIDs(this.Chart1);
+                console.log(submitted);
             });
 
         },
@@ -155,6 +155,18 @@
         },
 
         methods: {
+
+            // addYAxisIDs(chart) {
+            //     let x = 0;
+            //     //use this when plotting multiple graphs on same axis
+            //     chart.data.datasets.forEach((dataset) => {
+            //         dataset.yAxisID="";
+            //         dataset.yAxisID=this.yAxisArray[0][x] //add data to end
+            //         x++;
+            //     });
+            //     x = 0;
+            //     chart.update();
+            // },
 
             //Split up all the lines then all the measurements and push to the graph
             splitData(data) {
@@ -173,8 +185,7 @@
                     splitted = [];
                 });
 
-            }
-            ,
+            },
 
             //create the chart into which the data is pushed
             createChart(chartId, chartData) {
@@ -185,8 +196,7 @@
                     options: chartData.options,
                 });
                 return (myChart); //make the chart accessible everywhere
-            }
-            ,
+            },
 
             //take data off the chart (one by one)
             removeData(data) {
@@ -194,8 +204,7 @@
                 data.data.datasets.forEach((dataset) => {
                     dataset.data = [];
                 })
-            }
-            ,
+            },
 
             //add data to chart
             addData(chart, label, data) {
@@ -209,8 +218,7 @@
                 });
                 x = 0;
                 chart.update();
-            }
-            ,
+            },
 
             //get the data from the CSV file from the webserver
             async getCSV() {
@@ -218,11 +226,9 @@
                 const data = await res.text();
                 //console.log(data)
                 return data;
-            }
-            ,
+            },
 
-        }
-        ,
+        },
 
     }
 
