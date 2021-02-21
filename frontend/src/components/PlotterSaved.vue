@@ -141,10 +141,9 @@
             });
 
             //finalise
-            bus.$on("Submitted ", (submitted)=> {
+            bus.$on("Submitted ", ()=> {
                 this.splitData(this.data);
-               // this.addYAxisIDs(this.Chart1);
-                console.log(submitted);
+                this.addYAxisIDs(this.Chart1);
             });
 
         },
@@ -156,17 +155,17 @@
 
         methods: {
 
-            // addYAxisIDs(chart) {
-            //     let x = 0;
-            //     //use this when plotting multiple graphs on same axis
-            //     chart.data.datasets.forEach((dataset) => {
-            //         dataset.yAxisID="";
-            //         dataset.yAxisID=this.yAxisArray[0][x] //add data to end
-            //         x++;
-            //     });
-            //     x = 0;
-            //     chart.update();
-            // },
+            addYAxisIDs(chart) {
+                let x = 0;
+                //use this when plotting multiple graphs on same axis
+                chart.options.scales.yAxes.forEach((element) => {
+                    console.log(this.yAxisArray[0][x]);
+                    element.scaleLabel.labelString=`${this.yAxisArray[0][x]}`;
+                    //add data to end
+                    x++;
+                });
+                chart.update();
+            },
 
             //Split up all the lines then all the measurements and push to the graph
             splitData(data) {

@@ -6,7 +6,7 @@
             <label for="data-sets1" class="label">Choose Data Set 1:</label>
             <br>
             <select name="data-sets1" id="data-sets1">
-                <option value="999">Data Set 1:</option>
+                <option value="999">N/A:</option>
                 <optgroup label="Electrical">
                     <option value="1">Speed</option>
                     <option value="2">Voltage</option>
@@ -29,7 +29,7 @@
             <label for="data-sets2" class="label">Choose Data Set 2:</label>
             <br>
             <select name="data-sets2" id="data-sets2">
-                <option value="999">Data Set 2:</option>
+                <option value="999">N/A</option>
                 <optgroup label="Electrical">
                     <option value="1">Speed</option>
                     <option value="2">Voltage</option>
@@ -52,7 +52,7 @@
             <label for="data-sets3" class="label">Choose Data Set 3:</label>
             <br>
             <select name="data-sets3" id="data-sets3">
-                <option value="999">Data Set 3:</option>
+                <option value="999">N/A</option>
                 <optgroup label="Electrical">
                     <option value="1">Speed</option>
                     <option value="2">Voltage</option>
@@ -75,7 +75,7 @@
             <label for="data-sets4" class="label">Choose Data Set 4:</label>
             <br>
             <select name="data-sets4" id="data-sets4">
-                <option value="999">Data Set 4:</option>
+                <option value="999">N/A</option>
                 <optgroup label="Electrical">
                     <option value="1">Speed</option>
                     <option value="2">Voltage</option>
