@@ -1,9 +1,12 @@
 <template>
-    <canvas id="sensor-chart" width="600" height="250"></canvas>
+    <div>
+        <canvas id="sensor-chart" width="600" height="250"></canvas>
+    </div>
 </template>
 
 <script>
     import Chart from 'chart.js';
+    import 'chartjs-plugin-zoom';
     import {bus} from '../main';
 
     let arduinoData = {
@@ -44,7 +47,6 @@
                 },
             ],
         },
-
         options: {
             animation: {
                 duration: 0
@@ -102,7 +104,19 @@
                         labelString: "Time(ms)",
                     },
                 }]
-            }
+            },
+            plugins: {
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy'
+                    },
+                    zoom: {
+                        enabled: true,
+                        mode: 'xy',
+                    }
+                }
+            },
         },
     };
 
@@ -141,11 +155,14 @@
             });
 
             //finalise
-            bus.$on("Submitted ", ()=> {
+            bus.$on("Submitted ", () => {
                 this.splitData(this.data);
                 this.addYAxisIDs(this.Chart1);
             });
 
+            bus.$on("Zoom Reset ", () => {
+                // this.Chart1.resetZoom();
+            });
         },
 
         beforeDestroy() {
@@ -160,7 +177,7 @@
                 //use this when plotting multiple graphs on same axis
                 chart.options.scales.yAxes.forEach((element) => {
                     console.log(this.yAxisArray[0][x]);
-                    element.scaleLabel.labelString=`${this.yAxisArray[0][x]}`;
+                    element.scaleLabel.labelString = `${this.yAxisArray[0][x]}`;
                     //add data to end
                     x++;
                 });
