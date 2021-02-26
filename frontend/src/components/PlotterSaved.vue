@@ -238,7 +238,8 @@
 
             //get the data from the CSV file from the webserver
             async getCSV() {
-                const res = await fetch(' http://localhost:1000/request', {});
+                let host = window.location.protocol + "//" + window.location.host;
+                const res = await fetch(host, {});
                 const data = await res.text();
                 //console.log(data)
                 return data;
