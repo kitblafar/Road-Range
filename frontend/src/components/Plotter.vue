@@ -74,7 +74,7 @@ export default {
 
   name: "Plotter",
   mounted() {
-    let host = "ws://" + window.location.host;
+    let host = "ws://" + window.location.hostname+":4200";
     this.socket = new WebSocket(host); //reopen websocket
     let Chart1 = this.createChart('sensor-chart', arduinoData);
     console.log("chart created");
