@@ -9,7 +9,7 @@
     import 'chartjs-plugin-zoom';
     import {bus} from '../main';
 
-    let arduinoData = {
+    let CANData = {
         type: 'line',
         data: {
             labels: [], //put time in here
@@ -108,12 +108,11 @@
             plugins: {
                 zoom: {
                     pan: {
-                        enabled: true,
-                        mode: 'xy'
+                        enabled: false,
                     },
                     zoom: {
                         enabled: true,
-                        mode: 'xy',
+                        drag: true,
                     }
                 }
             },
@@ -127,7 +126,7 @@
         async mounted() {
             this.data = await this.getCSV();
             console.log("gets to mounted");
-            this.Chart1 = this.createChart('sensor-chart', arduinoData);
+            this.Chart1 = this.createChart('sensor-chart', CANData);
             console.log("gets to chart");
 
             //count the number of measurements on the CAN bus
@@ -145,7 +144,7 @@
             bus.$on("Data Set Index ", (index) => {
                 this.indexArray = [];
                 //clear the data from last time
-                this.removeData(arduinoData);
+                this.removeData(CANData);
                 this.indexArray.push(index);
             });
             //find the yaxis titles (names of data sets)
@@ -161,12 +160,12 @@
             });
 
             bus.$on("Zoom Reset ", () => {
-                // this.Chart1.resetZoom();
+                this.Chart1.resetZoom();
             });
         },
 
         beforeDestroy() {
-            this.removeData(arduinoData);
+            this.removeData(CANData);
             console.log("unmounted");
         },
 

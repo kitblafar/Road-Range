@@ -4,6 +4,7 @@
 
 <script>
 import Chart from 'chart.js';
+import {bus} from "@/main";
 // Create WebSocket connection.
 
 const startTime = Date.now();
@@ -26,25 +27,14 @@ let arduinoData = {
     responsive: true,
     plugins: {
       zoom: {
-        // Container for pan options
         pan: {
-          // Boolean to enable panning
-          enabled: true,
-
-          // Panning directions. Remove the appropriate direction to disable
-          // Eg. 'y' would only allow panning in the y direction
-          mode: 'xy'
+          enabled: false,
         },
-
-        // Container for zoom options
         zoom: {
-          // Boolean to enable zooming
           enabled: true,
-
-          // Zooming directions. Remove the appropriate direction to disable
-          // Eg. 'y' would only allow zooming in the y direction
-          mode: 'xy',
+          drag: true,
         }
+
       }
     },
     animation: {
@@ -75,15 +65,20 @@ export default {
   name: "Plotter",
   mounted() {
     let host = "ws://" + window.location.hostname+":4200";
-    this.socket = new WebSocket(host); //reopen websocket
-    let Chart1 = this.createChart('sensor-chart', arduinoData);
+    this.socket = new WebSocket(host); //reopen websocket as it is closed when saved view selected
+    let Chart1 = this.createChart('sensor-chart', arduinoData); //make chart out of arduino data
     console.log("chart created");
+
     // Listen for messages
     this.socket.addEventListener('message', (event) => {
       // console.log('Message from server ', event.data);
       //add data to the arduinodata.data array and the time to the label array
       let time = Date.now() - startTime;
       this.addData(Chart1, time, event.data);
+    });
+
+    bus.$on("Zoom Reset1 ", () => {
+      Chart1.resetZoom();
     });
   },
 
