@@ -98,20 +98,37 @@ function handleConnection(client) {
         //if does not take up three values then pad with zeros
         IPAddressUnjoined[0]=pad(IPAddressSplit[0].split(''),-3, 0);
         IPAddressArray[0]=IPAddressUnjoined[0].join('');
-        IPAddressUnjoined[1]=pad(IPAddressSplit[1].split(''),-3, 0);
-        IPAddressArray[1]=IPAddressUnjoined[1].join('');
-        IPAddressUnjoined[2]=pad(IPAddressSplit[2].split(''),-3, 0);
-        IPAddressArray[2]=IPAddressUnjoined[2].join('');
-        IPAddressUnjoined[3]=pad(IPAddressSplit[3].split(''),-3, 0);
-        IPAddressArray[3]=IPAddressUnjoined[3].join('');
-
-        let IPAddress=IPAddressArray.join('');
-        sensorPort.write(IPAddress, (err) => {
+        sensorPort.write(IPAddressArray[0], (err) => {
             if (err) {
                 return console.log('Error on write: ', err.message);
             }
-            console.log('message written: '+IPAddress);
+            console.log('message written: '+IPAddressArray[0]);
         });
+        IPAddressUnjoined[1]=pad(IPAddressSplit[1].split(''),-3, 0);
+        IPAddressArray[1]=IPAddressUnjoined[1].join('');
+        sensorPort.write(IPAddressArray[1], (err) => {
+            if (err) {
+                return console.log('Error on write: ', err.message);
+            }
+            console.log('message written: '+IPAddressArray[1]);
+        });
+        IPAddressUnjoined[2]=pad(IPAddressSplit[2].split(''),-3, 0);
+        IPAddressArray[2]=IPAddressUnjoined[2].join('');
+        sensorPort.write(IPAddressArray[2], (err) => {
+            if (err) {
+                return console.log('Error on write: ', err.message);
+            }
+            console.log('message written: '+IPAddressArray[2]);
+        });
+        IPAddressUnjoined[3]=pad(IPAddressSplit[3].split(''),-3, 0);
+        IPAddressArray[3]=IPAddressUnjoined[3].join('');
+        sensorPort.write(IPAddressArray[3], (err) => {
+            if (err) {
+                return console.log('Error on write: ', err.message);
+            }
+            console.log('message written: '+IPAddressArray[3]);
+        });
+
     });
 }
 
