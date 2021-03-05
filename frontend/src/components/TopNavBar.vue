@@ -22,8 +22,11 @@
 </template>
 
 <script>
+
     export default {
-        name: "TopNavBar"
+        name: "TopNavBar",
+      mounted() {
+      }
     }
 </script>
 

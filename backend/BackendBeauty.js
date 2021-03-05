@@ -2,6 +2,7 @@
 let ArduinoPort = require('serialport');
 let WebSocket = require('ws').Server;
 let fs = require('fs');
+var pad = require('array-pad');
 //for web request
 let http = require('http');
 let url = require('url');
@@ -34,12 +35,14 @@ const SERVER_PORT = 4200;               // websocket server port number
 let wss = new WebSocket({port: SERVER_PORT}); // the webSocket server
 let connections = new Array;          // list of connections to the server
 
-//calling functions
 //serial functions
+
+//reading functions
 sensorPort.on('open', showPortOpen);
 parser.on('data', broadcastAndWrite); //broadcast data and write to CSV
 sensorPort.on('close', showPortClose);
 sensorPort.on('error', showError);
+
 
 //web socket function
 wss.on('connection', handleConnection);
@@ -84,6 +87,31 @@ function handleConnection(client) {
         console.log("connection closed");
         let position = connections.indexOf(client); // get the client's position in the array
         connections.splice(position, 1); // and delete it from the array
+    });
+    //writing functions when a new address comes down the websocket
+    client.on('message', message => {
+        let beforeSplit=message;
+
+        let IPAddressSplit=beforeSplit.split('.');
+        let IPAddressArray=[];
+        let IPAddressUnjoined=[];
+        //if does not take up three values then pad with zeros
+        IPAddressUnjoined[0]=pad(IPAddressSplit[0].split(''),-3, 0);
+        IPAddressArray[0]=IPAddressUnjoined[0].join('');
+        IPAddressUnjoined[1]=pad(IPAddressSplit[1].split(''),-3, 0);
+        IPAddressArray[1]=IPAddressUnjoined[1].join('');
+        IPAddressUnjoined[2]=pad(IPAddressSplit[2].split(''),-3, 0);
+        IPAddressArray[2]=IPAddressUnjoined[2].join('');
+        IPAddressUnjoined[3]=pad(IPAddressSplit[3].split(''),-3, 0);
+        IPAddressArray[3]=IPAddressUnjoined[3].join('');
+
+        let IPAddress=IPAddressArray.join('');
+        sensorPort.write(IPAddress, (err) => {
+            if (err) {
+                return console.log('Error on write: ', err.message);
+            }
+            console.log('message written: '+IPAddress);
+        });
     });
 }
 

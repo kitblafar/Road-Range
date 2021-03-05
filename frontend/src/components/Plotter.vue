@@ -8,7 +8,6 @@ import {bus} from "@/main";
 // Create WebSocket connection.
 
 const startTime = Date.now();
-// import {bus} from '@/main';
 
 
 let arduinoData = {
@@ -64,11 +63,13 @@ export default {
 
   name: "Plotter",
   mounted() {
-    let host = "ws://" + window.location.hostname+":4200";
+    let host = "ws://" + window.location.hostname + ":4200";
     this.socket = new WebSocket(host); //reopen websocket as it is closed when saved view selected
     let Chart1 = this.createChart('sensor-chart', arduinoData); //make chart out of arduino data
     console.log("chart created");
-
+    this.socket.onopen = function () {
+      bus.$emit("IP Refresh ", "IP")
+    };
     // Listen for messages
     this.socket.addEventListener('message', (event) => {
       // console.log('Message from server ', event.data);
@@ -76,10 +77,14 @@ export default {
       let time = Date.now() - startTime;
       this.addData(Chart1, time, event.data);
     });
-
+    bus.$on("IP Refresh ", () => {
+      this.socket.send(window.location.hostname);
+      console.log(window.location.hostname);
+    });
     bus.$on("Zoom Reset1 ", () => {
       Chart1.resetZoom();
     });
+
   },
 
   beforeDestroy() { //close the websocket so it can be reopened
