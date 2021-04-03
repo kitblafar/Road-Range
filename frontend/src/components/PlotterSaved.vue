@@ -162,7 +162,12 @@
             bus.$on("Zoom Reset ", () => {
                 this.Chart1.resetZoom();
             });
+          //Save this data set
+          bus.$on("Save this data ", () => {
+             this.saveData();
+          });
         },
+
 
         beforeDestroy() {
             this.removeData(CANData);
@@ -235,6 +240,13 @@
                 chart.update();
             },
 
+          saveData(){
+            let host = window.location.protocol + "//" + window.location.hostname+":2000";
+            fetch(host, {
+              method: 'post',
+              body: 'save'
+            });
+          },
             //get the data from the CSV file from the webserver
             async getCSV() {
                 let host = window.location.protocol + "//" + window.location.hostname+":2000";
@@ -243,11 +255,9 @@
                 //console.log(data)
                 return data;
             },
-
         },
 
     }
-
 
 </script>
 

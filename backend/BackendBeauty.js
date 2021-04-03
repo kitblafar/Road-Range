@@ -13,7 +13,7 @@ let _ = require('underscore');
 let startTime = Date.now();
 
 //name CSV file (must have no :,- in)
-let pathName = './StoredData/' // where the file will go
+let pathName = '/StoredData/' // where the file will go
 var date = new Date().toISOString();
 var res1 = date.replace(/:/g, "-");
 var res2 = res1.replace(/\./g, "-");
@@ -30,8 +30,8 @@ let readLine = ArduinoPort.parsers.Readline; // make instance of Readline parser
 let parser = new readLine(); // make a new parser to read ASCII lines
 sensorPort.pipe(parser); // pipe the serial stream to the parser
 
-//config websocket
-const SERVER_PORT = 4200;               // websocket server port number
+//config websocket for live data
+const SERVER_PORT = 4200;               // websocket server live port number
 let wss = new WebSocket({port: SERVER_PORT}); // the webSocket server
 let connections = new Array;          // list of connections to the server
 
@@ -59,15 +59,6 @@ function broadcastAndWrite(data) {
     if (connections.length > 0) {
         broadcast(data);
     }
-    //Use the bellow function to write data directly to CSV file (but will use drag and drop instead)
-    /* let CSVData = `${Date.now() - startTime},${data}`
-    //writing sensor data to csv file (where is can be stored for later graphing)
-    fs.appendFile(fileName, CSVData, function (err) {
-        if (err) return console.log(err);
-        //console.log('data written to file-' + fileName);
-    });
-    */
-
 
 }
 
@@ -88,8 +79,10 @@ function handleConnection(client) {
         let position = connections.indexOf(client); // get the client's position in the array
         connections.splice(position, 1); // and delete it from the array
     });
+
     //writing functions when a new address comes down the websocket
     client.on('message', message => {
+        //is it an IP address?
         let beforeSplit=message;
 
         let IPAddressSplit=beforeSplit.split('.');
@@ -146,14 +139,30 @@ const headers = {
     "Access-Control-Max-Age": 2592000, // 30 days
     "Content-Type": 'text/csv'
 };
-//creating the server
+//creating the server for data
 http.createServer(function (req, res) {
     if (req.method === "OPTIONS") {
         res.writeHead(204, headers);
         res.end();
         return;
     }
-    fs.readFile(__dirname + "/DataGoesHere/Test_Data.csv", function (err, data) {
+    //if this is telling that data needs to be saved
+    if (req.method === "POST"){
+        console.log("saving")
+        //copying current car data to csv file (where is can be stored for later graphing)
+        fs.copyFile(__dirname + "/DataGoesHere/Data.csv",__dirname +fileName, (err) => {
+            if (err) throw err;
+            console.log('File was copied to destination');
+        });
+        // //rename it with the current data and time
+        // fs.rename(__dirname + "/StoredData/Data.csv",__dirname + "/StoredData/Data.csv"+fileName , function (err) {
+        //     if (err) throw err;
+        //     console.log('File Renamed!');
+        // });
+        return;
+    }
+
+    fs.readFile(__dirname + "/DataGoesHere/Data.csv", function (err, data) {
         if (err) {
             res.writeHead(404);
             res.end(JSON.stringify(err));
@@ -164,6 +173,10 @@ http.createServer(function (req, res) {
         console.log(data);
     });
 }).listen(2000);
+
+async function copyFile() {
+
+};
 
 /*
 //Returns the most recent file when names with current time

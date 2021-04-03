@@ -5,7 +5,6 @@
 <script>
 import Chart from 'chart.js';
 import {bus} from "@/main";
-// Create WebSocket connection.
 
 const startTime = Date.now();
 
@@ -63,6 +62,7 @@ export default {
 
   name: "Plotter",
   mounted() {
+    // Create WebSocket connection.
     let host = "ws://" + window.location.hostname + ":4200";
     this.socket = new WebSocket(host); //reopen websocket as it is closed when saved view selected
     let Chart1 = this.createChart('sensor-chart', arduinoData); //make chart out of arduino data

@@ -102,6 +102,9 @@
                 <div class="button-holder">
                     <button class="button" @click=this.zoomReset>Zoom Reset</button>
                 </div>
+              <div class="button-holder">
+                <button class="button" @click=this.saveThis>Save This Data</button>
+              </div>
             </li>
         </nav>
     </div>
@@ -118,7 +121,9 @@
             zoomReset() {
                 bus.$emit("Zoom Reset ", "Zoom");
             },
-
+          saveThis() {
+            bus.$emit("Save this data ", "Save");
+          },
             //function to emit the values of a data-sets (1-4) on the event bus
             processForm() {
                 let indexArray = [];
