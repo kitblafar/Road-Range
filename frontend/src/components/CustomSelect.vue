@@ -102,10 +102,16 @@
                 <div class="button-holder">
                     <button class="button" @click=this.zoomReset>Zoom Reset</button>
                 </div>
-              <div class="button-holder">
-                <button class="button" @click=this.saveThis>Save This Data</button>
-              </div>
+
             </li>
+          <li>
+            <div class="button-holder">
+              <button id="savedbutton" class="button" @click=this.saveThis>Save This Data</button>
+            </div>
+            <div class="button-holder">
+              <button class="button" @click=this.IPAddressGenerate>Update IP Address</button>
+            </div>
+          </li>
         </nav>
     </div>
 </template>
@@ -115,14 +121,35 @@
 
     export default {
         name: "CustomSelect",
-        mounted() {
-        },
+        async mounted() {
+          },
         methods: {
             zoomReset() {
                 bus.$emit("Zoom Reset ", "Zoom");
             },
-          saveThis() {
-            bus.$emit("Save this data ", "Save");
+          async saveThis() {
+            let host = window.location.protocol + "//" + window.location.hostname+":2000";
+            let headers = new Headers();
+            headers.append('Authorization', 'save');
+            const res = await fetch(host, {
+              method: 'GET',
+              headers: headers
+            });
+            const response = await res.text();
+            console.log(response);
+            if(response==="saved") {
+              document.getElementById("savedbutton").style.background = "#009933";
+              document.getElementById("savedbutton").style.color = "white";
+            }
+          },
+          IPAddressGenerate(){
+            let host = window.location.protocol + "//" + window.location.hostname+":2000";
+            let headers1 = new Headers();
+            headers1.append('Authorization', window.location.hostname);
+            fetch(host, {
+                method: 'GET',
+                headers: headers1
+              });
           },
             //function to emit the values of a data-sets (1-4) on the event bus
             processForm() {

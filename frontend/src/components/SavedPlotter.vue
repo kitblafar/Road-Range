@@ -5,11 +5,11 @@
 </template>
 
 <script>
-    import Chart from 'chart.js';
-    import 'chartjs-plugin-zoom';
-    import {bus} from '../main';
+import Chart from 'chart.js';
+import 'chartjs-plugin-zoom';
+import {bus} from '../main';
 
-    let CANData = {
+let CANData = {
         type: 'line',
         data: {
             labels: [], //put time in here
@@ -162,10 +162,6 @@
             bus.$on("Zoom Reset ", () => {
                 this.Chart1.resetZoom();
             });
-          //Save this data set
-          bus.$on("Save this data ", () => {
-             this.saveData();
-          });
         },
 
 
@@ -240,20 +236,11 @@
                 chart.update();
             },
 
-          saveData(){
-            let host = window.location.protocol + "//" + window.location.hostname+":2000";
-            fetch(host, {
-              method: 'post',
-              body: 'save'
-            });
-          },
             //get the data from the CSV file from the webserver
             async getCSV() {
-                let host = window.location.protocol + "//" + window.location.hostname+":2000";
+                let host = window.location.protocol + "//" + window.location.hostname+":2021";
                 const res = await fetch(host, {});
-                const data = await res.text();
-                //console.log(data)
-                return data;
+                return await res.text();
             },
         },
 

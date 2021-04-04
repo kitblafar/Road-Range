@@ -1,29 +1,32 @@
 <template>
   <div class="app">
-    <header class="page-header">
-      <TopNavBar/>
-    </header>
-    <main class="container">
-      <router-view/>
-    </main>
+    <div id="nav">
+      <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace></router-link>
+    </div>
+    <router-view @authenticated="setAuthenticated" />
   </div>
 </template>
 
 <script>
 // import { bus } from './main'
-import TopNavBar from "@/components/TopNavBar";
 
 export default {
   name: 'App',
+  mounted() {
+    if(!this.authenticated) {
+      this.$router.replace({ name: "login" });
+    }
+  },
   components: {
-    TopNavBar
   },
 
   methods: {
-    /* globalPageChangeOff() {
-        bus.$emit('changeItOff', 'changed page off');
-        //console.log("hello");
-    }, */
+    setAuthenticated(status) {
+      this.authenticated = status;
+    },
+    logout() {
+      this.authenticated = false;
+    }
   }
 }
 

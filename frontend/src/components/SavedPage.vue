@@ -1,5 +1,8 @@
 <template>
     <div id="Saved-Page">
+      <header class="page-header">
+        <TopNavBar/>
+      </header>
         <CustomSelect/>
         <div class="title">Plotting Saved Values</div>
         <PlotterSaved class="plotter"></PlotterSaved>
@@ -7,13 +10,16 @@
 </template>
 
 <script>
-    import PlotterSaved from './PlotterSaved.vue';
+    import PlotterSaved from './SavedPlotter.vue';
     import CustomSelect from "@/components/CustomSelect";
+    import TopNavBar from "@/components/TopNavBar";
     export default {
         name: "SavedPage",
         components: {
             PlotterSaved,
-            CustomSelect},
+            CustomSelect,
+            TopNavBar
+        },
 
     };
 

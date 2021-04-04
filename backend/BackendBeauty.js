@@ -1,3 +1,12 @@
+// UON MEng Group Project
+// Backend
+//  Includes: >Reading serial data from arduino and sending to websocket (IP address sent down websocket)
+//  >A web server on port 2000 that handles: Authorization, saving data and IP Address Sharing
+//  >Another port on port 2021 that handles: Data Acquisition
+// ------Set the Password------//
+let username= "UON";
+let password="UON";
+
 //libraries
 let ArduinoPort = require('serialport');
 let WebSocket = require('ws').Server;
@@ -8,7 +17,7 @@ let http = require('http');
 let url = require('url');
 let path = require('path');
 let _ = require('underscore');
-
+let base64 = require('base-64');
 
 let startTime = Date.now();
 
@@ -79,50 +88,6 @@ function handleConnection(client) {
         let position = connections.indexOf(client); // get the client's position in the array
         connections.splice(position, 1); // and delete it from the array
     });
-
-    //writing functions when a new address comes down the websocket
-    client.on('message', message => {
-        //is it an IP address?
-        let beforeSplit=message;
-
-        let IPAddressSplit=beforeSplit.split('.');
-        let IPAddressArray=[];
-        let IPAddressUnjoined=[];
-        //if does not take up three values then pad with zeros
-        IPAddressUnjoined[0]=pad(IPAddressSplit[0].split(''),-3, 0);
-        IPAddressArray[0]=IPAddressUnjoined[0].join('');
-        sensorPort.write(IPAddressArray[0], (err) => {
-            if (err) {
-                return console.log('Error on write: ', err.message);
-            }
-            console.log('message written: '+IPAddressArray[0]);
-        });
-        IPAddressUnjoined[1]=pad(IPAddressSplit[1].split(''),-3, 0);
-        IPAddressArray[1]=IPAddressUnjoined[1].join('');
-        sensorPort.write(IPAddressArray[1], (err) => {
-            if (err) {
-                return console.log('Error on write: ', err.message);
-            }
-            console.log('message written: '+IPAddressArray[1]);
-        });
-        IPAddressUnjoined[2]=pad(IPAddressSplit[2].split(''),-3, 0);
-        IPAddressArray[2]=IPAddressUnjoined[2].join('');
-        sensorPort.write(IPAddressArray[2], (err) => {
-            if (err) {
-                return console.log('Error on write: ', err.message);
-            }
-            console.log('message written: '+IPAddressArray[2]);
-        });
-        IPAddressUnjoined[3]=pad(IPAddressSplit[3].split(''),-3, 0);
-        IPAddressArray[3]=IPAddressUnjoined[3].join('');
-        sensorPort.write(IPAddressArray[3], (err) => {
-            if (err) {
-                return console.log('Error on write: ', err.message);
-            }
-            console.log('message written: '+IPAddressArray[3]);
-        });
-
-    });
 }
 
 // broadcasting sensor data to all webSocket clients
@@ -135,11 +100,12 @@ function broadcast(data) {
 //headers to prevent CORS error
 const headers = {
     "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "*",
     "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
     "Access-Control-Max-Age": 2592000, // 30 days
     "Content-Type": 'text/csv'
 };
-//creating the server for data
+//creating the server for messages
 http.createServer(function (req, res) {
     if (req.method === "OPTIONS") {
         res.writeHead(204, headers);
@@ -147,22 +113,44 @@ http.createServer(function (req, res) {
         return;
     }
     //if this is telling that data needs to be saved
-    if (req.method === "POST"){
-        console.log("saving")
-        //copying current car data to csv file (where is can be stored for later graphing)
-        fs.copyFile(__dirname + "/DataGoesHere/Data.csv",__dirname +fileName, (err) => {
-            if (err) throw err;
-            console.log('File was copied to destination');
-        });
-        // //rename it with the current data and time
-        // fs.rename(__dirname + "/StoredData/Data.csv",__dirname + "/StoredData/Data.csv"+fileName , function (err) {
-        //     if (err) throw err;
-        //     console.log('File Renamed!');
+    if (req.headers.authorization==='save'){
+        res.writeHead(200, headers);
+            console.log("saving");
+            //copying current car data to csv file (where is can be stored for later graphing)
+            fs.copyFile(__dirname + "/DataGoesHere/CarData.csv", __dirname + fileName, (err) => {
+                if (err) throw err;
+                console.log('File was copied to destination');
+            });
+            res.end("saved");
+            return;
+        }
+    //check the password
+    let full='Basic' + base64.encode(username + ":" + password)
+    if(req.headers.authorization===full){
+        res.writeHead(200, headers);
+        console.log("Authorized")
+        res.end("true");
+
+    }
+    else {
+        res.writeHead(200, headers);
+        let IPAddress = req.headers.authorization;
+        console.log(IPAddress);
+        // sensorPort.write(IPAddress, (err) => {
+        //     if (err) {
+        //         return console.log('Error on write: ', err.message);
+        //     }
         // });
+    }
+}).listen(2000);
+
+http.createServer(function (req, res) {
+    if (req.method === "OPTIONS") {
+        res.writeHead(204, headers);
+        res.end();
         return;
     }
-
-    fs.readFile(__dirname + "/DataGoesHere/Data.csv", function (err, data) {
+    fs.readFile(__dirname + "/DataGoesHere/CarData.csv", function (err, data) {
         if (err) {
             res.writeHead(404);
             res.end(JSON.stringify(err));
@@ -172,12 +160,7 @@ http.createServer(function (req, res) {
         res.end(data);
         console.log(data);
     });
-}).listen(2000);
-
-async function copyFile() {
-
-};
-
+}).listen(2021);
 /*
 //Returns the most recent file when names with current time
 //find the newest data file N.B. Return only base file name without dir

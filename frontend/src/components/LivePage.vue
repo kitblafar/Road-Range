@@ -1,5 +1,8 @@
 <template>
   <div class="Live_Page">
+    <header class="page-header">
+      <TopNavBar/>
+    </header>
     <div class="button-holder">
       <button class="button" @click=this.zoomReset>Zoom Reset</button>
     </div>
@@ -9,12 +12,14 @@
 </template>
 
 <script>
-import Plotter from './Plotter.vue'
+import Plotter from './LivePlotter.vue'
 import {bus} from "@/main";
+import TopNavBar from "@/components/TopNavBar";
 
 export default {
   name: "LivePage",
-  components: {Plotter},
+  components: {Plotter,
+  TopNavBar},
   methods: {
     zoomReset() {
       bus.$emit("Zoom Reset1 ", "Zoom");

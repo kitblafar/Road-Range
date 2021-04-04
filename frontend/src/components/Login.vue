@@ -1,0 +1,74 @@
+<template>
+  <div id="login">
+    <h1>Login UON Telemetry</h1>
+    <img src="../assets/Logo.png" class="logo" alt="UoN logo" height="100" />
+    <div class="loginsec">
+    <input type="text" name="username" v-model="input.username" placeholder="Username" />
+    <input type="password" name="password" v-model="input.password" placeholder="Password" />
+    <button type="button" v-on:click="login()">Login</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import LivePage from "@/components/LivePage";
+
+export default {
+  name: 'Login',
+  data() {
+    return {
+      input: {
+        username: "",
+        password: ""
+      }
+    }
+  },
+  methods: {
+    async login() {
+      this.response= await this.retrieveAuthentication();
+
+      if(this.input.username != "" && this.input.password != "") {
+        if(this.response==="true") {
+          this.$emit("authenticated", true);
+          this.$router.replace({ name: "Live",
+            component: LivePage});
+        } else {
+          console.log("The username and / or password is incorrect");
+        }
+      } else {
+        console.log("A username and password must be present");
+      }
+    },
+    async retrieveAuthentication(){
+      let base64 = require('base-64');
+      let headers = new Headers();
+      headers.append('Authorization', 'Basic' + base64.encode(this.input.username + ":" + this.input.password));
+      let host = window.location.protocol + "//" + window.location.hostname+":2000";
+      const res = await fetch(host, {
+        method: 'GET',
+        headers: headers
+      });
+      const response = await res.text();
+      console.log(response)
+      return response;
+    }
+  }
+}
+</script>
+
+<style scoped>
+.logo{
+  position: center;
+}
+.loginsec{
+  padding-top: 5%;
+}
+#login {
+  width: 500px;
+  border: 1px solid #CCCCCC;
+  background-color: #FFFFFF;
+  margin: auto;
+  margin-top: 200px;
+  padding: 20px;
+}
+</style>

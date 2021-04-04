@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "array-pad": "0.0.1",
+    "base-64": "^1.0.0",
     "fs": "0.0.1-security",
     "serialport": "^8.0.8",
     "underscore": "^1.12.0",

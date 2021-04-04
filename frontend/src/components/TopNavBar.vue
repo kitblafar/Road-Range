@@ -3,7 +3,7 @@
 
         <nav class="navbar">
             <li>
-                <img src="../assets/logo.png" class="logo" alt="UoN logo" height="70"/>
+                <img src="../assets/Logo1.png" class="logo" alt="UoN logo" height="70"/>
             </li>
             <li>
                 <router-link class="link" :to="{ name: 'Live' }">
@@ -15,6 +15,11 @@
                     Saved Data Plot
                 </router-link>
             </li>
+          <li>
+            <router-link class="link" to="/login">
+              Logout
+            </router-link>
+          </li>
         </nav>
 
     </div>
