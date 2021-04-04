@@ -1,7 +1,7 @@
 <template>
   <div id="login">
     <h1>Login UON Telemetry</h1>
-    <img src="../assets/Logo.png" class="logo" alt="UoN logo" height="100" />
+    <img src="../assets/logo.png" class="logo" alt="UoN logo" height="100" />
     <div class="loginsec">
     <input type="text" name="username" v-model="input.username" placeholder="Username" />
     <input type="password" name="password" v-model="input.password" placeholder="Password" />
