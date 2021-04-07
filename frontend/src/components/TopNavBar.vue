@@ -2,24 +2,18 @@
     <div id="TopNavBar">
 
         <nav class="navbar">
-            <li>
+          <li class="logo">
                 <img src="../assets/Logo1.png" class="logo" alt="UoN logo" height="70"/>
-            </li>
-            <li>
+          </li>
                 <router-link class="link" :to="{ name: 'Live' }">
                     Live Data Plot
                 </router-link>
-            </li>
-            <li>
                 <router-link class="link" to="/Saved">
                     Saved Data Plot
                 </router-link>
-            </li>
-          <li>
             <router-link class="link" to="/login">
               Logout
             </router-link>
-          </li>
         </nav>
 
     </div>
@@ -41,18 +35,25 @@
         display: block;
         color: white;
         text-align: center;
-        font-size: x-large;
         font-weight: bold;
-        padding: 30px 30px;
+        padding: 2% 2%;
+        font-size: x-large;
         text-decoration: none;
+        float: left;
     }
-
     .link:hover {
         background-color: rgba(19, 17, 123, 1);
     }
-
+    @media (max-width:769px) {
+      .link {
+        font-size: small;
+      }
+      .logo{
+        height: 35px;
+      }
+    }
     .logo {
-        padding: 10px 10px;
+        padding: 0.5% 0.5%;
     }
 
     .navbar {

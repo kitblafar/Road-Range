@@ -214,7 +214,17 @@
         font-weight: bold;
         text-decoration: none;
     }
-
+    @media (max-width:769px) {
+      .button {
+        font-size: x-small;
+      }
+      .label{
+        font-size: small;
+      }
+    }
+    .logo {
+      padding: 0.5% 0.5%;
+    }
     .button:hover {
         background-color: lightblue;
     }
