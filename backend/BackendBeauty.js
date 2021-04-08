@@ -11,28 +11,23 @@ let password="UON";
 let ArduinoPort = require('serialport');
 let WebSocket = require('ws').Server;
 let fs = require('fs');
-var pad = require('array-pad');
+
 //for web request
 let http = require('http');
-let url = require('url');
-let path = require('path');
-let _ = require('underscore');
 let base64 = require('base-64');
-
-let startTime = Date.now();
 
 //name CSV file (must have no :,- in)
 let pathName = '/StoredData/' // where the file will go
-var date = new Date().toISOString();
-var res1 = date.replace(/:/g, "-");
-var res2 = res1.replace(/\./g, "-");
-var res3 = res2.replace(/Z/g, "");
-var fileName = (pathName + "output-" + res3 + ".csv")
+const date = new Date().toISOString();
+const res1 = date.replace(/:/g, "-");
+const res2 = res1.replace(/\./g, "-");
+const res3 = res2.replace(/Z/g, "");
+const fileName = (pathName + "output-" + res3 + ".csv");
 //console.log(fileName);
 
 //open port
 let portName = process.argv[2]; //usually COM3
-var sensorPort = new ArduinoPort(portName, 9600); //set arduino baud rate to 9600
+let sensorPort = new ArduinoPort(portName, 9600); //set arduino baud rate to 9600
 
 //creating ASCII encoded data
 let readLine = ArduinoPort.parsers.Readline; // make instance of Readline parser
@@ -41,17 +36,15 @@ sensorPort.pipe(parser); // pipe the serial stream to the parser
 
 //config websocket for live data
 const SERVER_PORT = 4200;               // websocket server live port number
-let wss = new WebSocket({port: SERVER_PORT}); // the webSocket server
+let wss = new WebSocket({port: SERVER_PORT}); // the WebSocket server
 let connections = new Array;          // list of connections to the server
 
-//serial functions
-
+//Serial Functions
 //reading functions
 sensorPort.on('open', showPortOpen);
-parser.on('data', broadcastAndWrite); //broadcast data and write to CSV
+parser.on('data', broadcastData);
 sensorPort.on('close', showPortClose);
 sensorPort.on('error', showError);
-
 
 //web socket function
 wss.on('connection', handleConnection);
@@ -62,13 +55,18 @@ function showPortOpen() {
     console.log('port open. Data rate: ' + sensorPort.baudRate);
 }
 
-function broadcastAndWrite(data) {
-    //console.log(data); //can be used to check data recieved
+function broadcastData(data) {
     // broadcast data to all webSocket clients
     if (connections.length > 0) {
         broadcast(data);
     }
+}
 
+// broadcasting sensor data to all webSocket clients
+function broadcast(data) {
+    for (myConnection in connections) {   //  go through the array of connections
+        connections[myConnection].send(data); // send data to each connection
+    }
 }
 
 function showPortClose() {
@@ -90,13 +88,7 @@ function handleConnection(client) {
     });
 }
 
-// broadcasting sensor data to all webSocket clients
-function broadcast(data) {
-    for (myConnection in connections) {   //  go through the array of connections
-        connections[myConnection].send(data); // send data to each connection
-    }
-}
-
+//Set up HTTP server
 //headers to prevent CORS error
 const headers = {
     "Access-Control-Allow-Origin": "*",
@@ -124,6 +116,7 @@ http.createServer(function (req, res) {
             res.end("saved");
             return;
         }
+
     //check the password
     let full='Basic' + base64.encode(username + ":" + password)
     if(req.headers.authorization===full){
@@ -132,16 +125,19 @@ http.createServer(function (req, res) {
         res.end("true");
 
     }
-    else {
+    else if (req.headers.hosting.length>1) {
         res.writeHead(200, headers);
-        let IPAddress = req.headers.authorization;
+        let IPAddress = req.headers.hosting;
         console.log(IPAddress);
         // sensorPort.write(IPAddress, (err) => {
         //     if (err) {
         //         return console.log('Error on write: ', err.message);
         //     }
         // });
+        res.writeHead(200, headers);
+        res.end("refresh");
     }
+
 }).listen(2000);
 
 http.createServer(function (req, res) {
@@ -160,20 +156,5 @@ http.createServer(function (req, res) {
         res.end(data);
         console.log(data);
     });
+    console.log('nothing');
 }).listen(2021);
-/*
-//Returns the most recent file when names with current time
-//find the newest data file N.B. Return only base file name without dir
-function getMostRecentFileName(dir) {
-    var files = fs.readdirSync(dir);
-
-    // use underscore for max()
-    return _.max(files, function (f) {
-        var fullpath = path.join(dir, f);
-
-        // ctime = creation time is used
-        // replace with mtime for modification time
-        return fs.statSync(fullpath).ctime;
-    });
-}
- */
