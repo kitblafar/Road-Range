@@ -8,7 +8,8 @@
     <router-view @authenticated="setAuthenticated" />
     </div>
     <div id="warning-message">
-      this website is only viewable in landscape mode
+      <h1>Oops! UON Telemetry is Only Viewable in Landscape Mode. Please Turn Your Phone or Extend Yor Screen.
+      </h1>
     </div>
   </div>
 </template>
@@ -46,8 +47,13 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+/* Only allow Landscape view as graph is too small in Portrait */
+#warning-message { display: none;
+font-weight: bold;
+color: #13117b;
+padding-top:1%;
+}
 
-#warning-message { display: none; }
 @media only screen and (orientation:portrait){
   #wrapper { display:none; }
   #warning-message { display:block; }
