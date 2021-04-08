@@ -222,9 +222,6 @@
         font-size: small;
       }
     }
-    .logo {
-      padding: 0.5% 0.5%;
-    }
     .button:hover {
         background-color: lightblue;
     }

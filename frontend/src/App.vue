@@ -8,8 +8,8 @@
     <router-view @authenticated="setAuthenticated" />
     </div>
     <div id="warning-message">
-      <h1>Oops! UON Telemetry is Only Viewable in Landscape Mode. Please Turn Your Phone or Extend Yor Screen.
-      </h1>
+      <h3>Oops! UON Telemetry is Only Viewable in Landscape Mode. Please Turn Your Phone.
+      </h3>
     </div>
   </div>
 </template>
@@ -54,7 +54,7 @@ color: #13117b;
 padding-top:1%;
 }
 
-@media only screen and (orientation:portrait){
+@media only screen and (max-width: 490px){
   #wrapper { display:none; }
   #warning-message { display:block; }
 }
