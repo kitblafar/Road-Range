@@ -11,7 +11,7 @@
                 <router-link class="link" to="/Saved">
                     Saved Data Plot
                 </router-link>
-            <router-link class="link" to="/login">
+            <router-link class="link" to="/login" >
               Logout
             </router-link>
         </nav>

@@ -25,8 +25,9 @@ export default {
   },
   methods: {
     async login() {
-      this.response= await this.retrieveAuthentication();
 
+      this.response= await this.retrieveAuthentication();
+      this.$emit("authenticated", true);
       if(this.input.username != "" && this.input.password != "") {
         if(this.response==="true") {
           this.$emit("authenticated", true);

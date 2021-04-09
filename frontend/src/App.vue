@@ -2,9 +2,6 @@
 
   <div class="app">
     <div id="wrapper">
-    <div id="nav">
-      <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace></router-link>
-    </div>
     <router-view @authenticated="setAuthenticated" />
     </div>
     <div id="warning-message">
@@ -20,7 +17,7 @@
 export default {
   name: 'App',
   mounted() {
-    if(!this.authenticated) {
+    if(this.authenticated===true) {
       this.$router.replace({ name: "login" });
     }
   },
@@ -31,9 +28,6 @@ export default {
     setAuthenticated(status) {
       this.authenticated = status;
     },
-    logout() {
-      this.authenticated = false;
-    }
   }
 }
 
