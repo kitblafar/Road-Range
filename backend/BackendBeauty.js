@@ -9,6 +9,11 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const originalHash='$2b$10$kc8A1aRIH55etUYM5SHXk.L4iZdkwlwGFuzGnYa.e.IbVJoFR3ajq';
 
+//Function to generate a hash from a new master password
+// const myPlaintextPassword=****;
+// bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+//     // Store hash in your password DB.
+// });
 
 //libraries
 let ArduinoPort = require('serialport');
@@ -121,9 +126,9 @@ http.createServer(function (req, res) {
         }
 
     //check the password hash
-    if(req.headers.authorization.length!=="save"){
+    if(req.headers.authorization==="password"){
         res.writeHead(200, headers);
-        let plainPassword=req.headers.authorization;
+        let plainPassword=req.headers.password;
         bcrypt.compare(plainPassword, originalHash, function(err, result) {
             if(result===true){
                 res.end("true");
@@ -131,10 +136,9 @@ http.createServer(function (req, res) {
             }
             else{
                 res.end("false")
-
             }
         });
-
+        return;
     }
     else if (req.headers.hosting.length>1) {
         res.writeHead(200, headers);
@@ -147,7 +151,9 @@ http.createServer(function (req, res) {
         // });
         res.writeHead(200, headers);
         res.end("refresh");
+        return;
     }
+    console.log('nothing 2000')
 
 }).listen(2000);
 
@@ -166,6 +172,7 @@ http.createServer(function (req, res) {
         res.writeHead(200, headers);
         res.end(data);
         console.log(data);
+        return;
     });
-    console.log('nothing');
+    console.log('nothing 2021');
 }).listen(2021);

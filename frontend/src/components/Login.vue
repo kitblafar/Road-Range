@@ -30,6 +30,7 @@ export default {
       if(this.input.username != "" && this.input.password != "") {
         if(this.response==="true") {
           this.$emit("authenticated", true);
+          this.IPAddressGenerate();
           this.$router.replace({ name: "Live",
             component: LivePage});
         } else {
@@ -39,20 +40,40 @@ export default {
         console.log("A username and password must be present");
       }
     },
+
     async retrieveAuthentication(){
       let headers = new Headers();
-      headers.append('Authorization', this.input.password);
+      headers.append('Authorization', "password");
+      headers.append('Password', this.input.password);
       let host = window.location.protocol + "//" + window.location.hostname+":2000";
       const res = await fetch(host, {
         method: 'GET',
         headers: headers
       });
       const response = await res.text();
-      console.log(response)
+      console.log('Authenticated')
       return response;
-    }
+    },
+
+    async IPAddressGenerate() {
+      let headers = new Headers();
+      let IP=window.location;
+      headers.append('Hosting', IP);
+      let host = window.location.protocol + "//" + window.location.hostname+":2000";
+      console.log('trying IP');
+      const res = await fetch(host, {
+        method: 'GET',
+        headers: headers
+      });
+      const response = await res.text();
+      console.log(response)
+      if(response==="refresh") {
+        console.log('IP address sent')
+      }
+    },
   }
 }
+
 </script>
 
 <style scoped>

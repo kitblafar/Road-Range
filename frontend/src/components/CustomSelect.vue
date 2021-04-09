@@ -98,20 +98,11 @@
             <li>
                 <div class="button-holder">
                     <button class="button" @click=this.processForm>Submit</button>
-                </div>
-                <div class="button-holder">
                     <button class="button" @click=this.zoomReset>Zoom Reset</button>
-                </div>
-
+                <button id="savedbutton" class="button" @click=this.saveThis>Save This Data</button>
+              </div>
             </li>
-          <li>
-            <div class="button-holder">
-              <button id="savedbutton" class="button" @click=this.saveThis>Save This Data</button>
-            </div>
-            <div class="button-holder">
-              <button id="IPButton" class="button" @click=this.IPAddressGenerate>Update IP Address</button>
-            </div>
-          </li>
+
         </nav>
     </div>
 </template>
@@ -139,21 +130,6 @@
             if(response==="saved") {
               document.getElementById("savedbutton").style.background = "#009933";
               document.getElementById("savedbutton").style.color = "white";
-            }
-          },
-          async IPAddressGenerate() {
-            let host = window.location.protocol + "//" + window.location.hostname+":2000";
-            let headers = new Headers();
-            let IP=window.location.hostname;
-            headers.append('Hosting', IP);
-            const res = await fetch(host, {
-              method: 'GET',
-              headers: headers
-            });
-            const response = await res.text();
-            if(response==="refresh") {
-              document.getElementById("IPButton").style.background = "#009933";
-              document.getElementById("IPButton").style.color = "white";
             }
           },
 
@@ -209,16 +185,21 @@
 
     .button-holder {
         padding-bottom: 5%;
-
+        padding-top: 5%;
     }
 
     .button {
         /*display: block;*/
-        color: rgba(19, 17, 123, 1);
+        color: rgb(19, 17, 123);
         /*text-align: center;*/
         font-size: medium;
         font-weight: bold;
         text-decoration: none;
+        border:none;
+    }
+    .button:hover{
+    background-color: #13117b;
+      color: white;
     }
     @media (max-width:769px) {
       .button {
@@ -227,9 +208,6 @@
       .label{
         font-size: small;
       }
-    }
-    .button:hover {
-        background-color: lightblue;
     }
 
 </style>
