@@ -16,7 +16,7 @@
 export default {
   name: 'App',
   mounted() {
-    if(this.authenticated===true) {
+    if(this.authenticated===false) {
       this.$router.replace({ name: "login" });
     }
   },

@@ -28,9 +28,8 @@ export default {
   },
   methods: {
     async login() {
-
       this.response= await this.retrieveAuthentication();
-      this.$emit("authenticated", true);
+      this.$emit("authenticated", false);
       if(this.input.username != "" && this.input.password != "") {
         if(this.response==="true") {
           this.$emit("authenticated", true);
@@ -63,13 +62,11 @@ export default {
       let IP=window.location;
       headers.append('Hosting', IP);
       let host = window.location.protocol + "//" + window.location.hostname+":2000";
-      console.log('trying IP');
       const res = await fetch(host, {
         method: 'GET',
         headers: headers
       });
       const response = await res.text();
-      console.log(response)
       if(response==="refresh") {
         console.log('IP address sent')
       }
