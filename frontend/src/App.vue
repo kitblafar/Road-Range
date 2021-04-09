@@ -1,5 +1,4 @@
 <template>
-
   <div class="app">
     <div id="wrapper">
     <router-view @authenticated="setAuthenticated" />

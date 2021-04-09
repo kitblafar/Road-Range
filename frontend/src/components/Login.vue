@@ -23,6 +23,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.IPAddressGenerate();
+  },
   methods: {
     async login() {
 
@@ -31,7 +34,6 @@ export default {
       if(this.input.username != "" && this.input.password != "") {
         if(this.response==="true") {
           this.$emit("authenticated", true);
-          this.IPAddressGenerate();
           this.$router.replace({ name: "Live",
             component: LivePage});
         } else {
