@@ -3,9 +3,12 @@
 //  Includes: >Reading serial data from arduino and sending to websocket (IP address sent down websocket)
 //  >A web server on port 2000 that handles: Authorization, saving data and IP Address Sharing
 //  >Another port on port 2021 that handles: Data Acquisition
-// ------Set the Password------//
-let username= "UON";
-let password="UON";
+
+//For password hashing
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const originalHash='$2b$10$kc8A1aRIH55etUYM5SHXk.L4iZdkwlwGFuzGnYa.e.IbVJoFR3ajq';
+
 
 //libraries
 let ArduinoPort = require('serialport');
@@ -117,12 +120,20 @@ http.createServer(function (req, res) {
             return;
         }
 
-    //check the password
-    let full='Basic' + base64.encode(username + ":" + password)
-    if(req.headers.authorization===full){
+    //check the password hash
+    if(req.headers.authorization.length!=="save"){
         res.writeHead(200, headers);
-        console.log("Authorized")
-        res.end("true");
+        let plainPassword=req.headers.authorization;
+        bcrypt.compare(plainPassword, originalHash, function(err, result) {
+            if(result===true){
+                res.end("true");
+                console.log("Authorized")
+            }
+            else{
+                res.end("false")
+
+            }
+        });
 
     }
     else if (req.headers.hosting.length>1) {

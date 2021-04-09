@@ -40,9 +40,8 @@ export default {
       }
     },
     async retrieveAuthentication(){
-      let base64 = require('base-64');
       let headers = new Headers();
-      headers.append('Authorization', 'Basic' + base64.encode(this.input.username + ":" + this.input.password));
+      headers.append('Authorization', this.input.password);
       let host = window.location.protocol + "//" + window.location.hostname+":2000";
       const res = await fetch(host, {
         method: 'GET',

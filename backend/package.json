@@ -12,6 +12,7 @@
   "dependencies": {
     "array-pad": "0.0.1",
     "base-64": "^1.0.0",
+    "bcrypt": "^5.0.1",
     "fs": "0.0.1-security",
     "serialport": "^8.0.8",
     "underscore": "^1.12.0",
