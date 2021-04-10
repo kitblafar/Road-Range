@@ -145,7 +145,10 @@ let CANData = {
                 this.indexArray = [];
                 //clear the data from last time
                 this.removeData(CANData);
-                this.indexArray.push(index);
+                index.forEach((element)=>{
+                  this.indexArray.push(element);
+                })
+                console.log(this.indexArray);
             });
             //find the yaxis titles (names of data sets)
             bus.$on("Data Set Names ", (yAxis) => {
@@ -155,8 +158,11 @@ let CANData = {
 
             //finalise
             bus.$on("Submitted ", () => {
+                console.log('submitted')
                 this.splitData(this.data);
                 this.addYAxisIDs(this.Chart1);
+                this.Chart1.update();
+                document.getElementById("loader").style.visibility = "hidden";
             });
 
             bus.$on("Zoom Reset ", () => {
@@ -166,6 +172,7 @@ let CANData = {
 
 
         beforeDestroy() {
+            this.Chart1.destroy();
             this.removeData(CANData);
             console.log("unmounted");
         },
@@ -178,6 +185,7 @@ let CANData = {
                 chart.options.scales.yAxes.forEach((element) => {
                     console.log(this.yAxisArray[0][x]);
                     element.scaleLabel.labelString = `${this.yAxisArray[0][x]}`;
+                    chart.data.datasets[x].label=`${this.yAxisArray[0][x]}`;
                     //add data to end
                     x++;
                 });
@@ -186,21 +194,32 @@ let CANData = {
 
             //Split up all the lines then all the measurements and push to the graph
             splitData(data) {
-                let splitted = [];
-                data.split(/\r\n|\r|\n/).forEach((element) => {
-                    //console.log("here is each element: "+ element);
-                    element.split(/,/).forEach((section) => {
-                        //console.log("here is each section: "+ section);
-                        splitted.push(section);
-                    });
-                    //console.log("This is the split array: "+splitted)
-                    let xdata = splitted[0];
-                    let ydata = [splitted[this.indexArray[0][0]], splitted[this.indexArray[0][1]], splitted[this.indexArray[0][2]], splitted[this.indexArray[0][3]]];
-                    //console.log("Here are y values "+ydata)
-                    this.addData(this.Chart1, xdata, ydata);
-                    splitted = [];
-                });
+              //remove the old data
+              this.removeData(CANData);
+              document.getElementById("loader").style.visibility = "visible";
+              let splitted = [];
+              let xdata=[];
+              let ydata=[];
+              let ydata1=[];
+              let ydata2=[];
+              let ydata3=[];
 
+              data.split(/\r\n|\r|\n/).forEach((element) => {
+                //console.log("here is each element: "+ element);
+                element.split(/,/).forEach((section) => {
+                  //console.log("here is each section: "+ section);
+                  splitted.push(section);
+                });
+                //console.log("This is the split array: "+splitted)
+                xdata.push(splitted[0]);
+                ydata.push(splitted[this.indexArray[0]]);
+                ydata1.push(splitted[this.indexArray[1]]);
+                ydata2.push(splitted[this.indexArray[2]]);
+                ydata3.push(splitted[this.indexArray[3]]);
+                //console.log("Here are y values "+ydata)
+                splitted = [];
+              });
+              this.addData(this.Chart1, xdata, ydata, ydata1,ydata2,ydata3);
             },
 
             //create the chart into which the data is pushed
@@ -213,8 +232,7 @@ let CANData = {
                 });
                 return (myChart); //make the chart accessible everywhere
             },
-
-            //take data off the chart (one by one)
+            //take data off the chart
             removeData(data) {
                 data.data.labels = [];
                 data.data.datasets.forEach((dataset) => {
@@ -223,17 +241,14 @@ let CANData = {
             },
 
             //add data to chart
-            addData(chart, label, data) {
-                //add x-axis to end
-                chart.data.labels.push(label);
-                let x = 0
-                //use this when plotting multiple graphs on same axis
-                chart.data.datasets.forEach((dataset) => {
-                    dataset.data.push(data[x]); //add data to end
-                    x++;
-                });
-                x = 0;
-                chart.update();
+            addData(chart, xSet, ySet, ySet1,ySet2,ySet3) {
+              //set the datasets in the chart data to the new values
+              chart.data.labels=xSet;
+              chart.data.datasets[0].data=ySet;
+              chart.data.datasets[1].data=ySet1;
+              chart.data.datasets[2].data=ySet2;
+              chart.data.datasets[3].data=ySet3;
+                return('finished');
             },
 
             //get the data from the CSV file from the webserver

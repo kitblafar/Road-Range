@@ -42,7 +42,7 @@ let arduinoData = {
       yAxes: [{
         scaleLabel: {
           display: true,
-          labelString: "Number",
+          labelString: "Slip Percentage (%)",
         },
         ticks: {
           padding: 25,

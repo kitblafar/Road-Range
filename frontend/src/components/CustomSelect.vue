@@ -97,11 +97,16 @@
             </form>
             <li>
                 <div class="button-holder">
-                    <button class="button" @click=this.processForm>Submit</button>
                     <button class="button" @click=this.zoomReset>Zoom Reset</button>
-                <button id="savedbutton" class="button" @click=this.saveThis>Save This Data</button>
+                <button  class="button" @click=this.saveThis >Save This Data</button>
+                  <button id="savedButton" @click=this.processForm class="button">Submit</button>
               </div>
             </li>
+          <li>
+            <div class="loadStyle">
+              <div id="loader"></div>
+            </div>
+          </li>
 
         </nav>
     </div>
@@ -113,8 +118,10 @@
     export default {
         name: "CustomSelect",
         async mounted() {
-          },
-        methods: {
+          document.getElementById("loader").style.visibility = "hidden";
+        },
+
+    methods: {
             zoomReset() {
                 bus.$emit("Zoom Reset ", "Zoom");
             },
@@ -135,6 +142,7 @@
 
             //function to emit the values of a data-sets (1-4) on the event bus
             processForm() {
+
                 let indexArray = [];
                 let yaxisArray = [];
 
@@ -191,6 +199,7 @@
     .button {
         /*display: block;*/
         color: rgb(19, 17, 123);
+      background-color: white;
         /*text-align: center;*/
         font-size: medium;
         font-weight: bold;
@@ -208,6 +217,22 @@
       .label{
         font-size: small;
       }
+    }
+    #loader {
+      border: 0.5vmax solid #ffffff; /* Light grey */
+      border-top: 0.5vmax solid #13117b; /* Blue */
+      border-radius: 50%;
+      width: 1vmax;
+      height: 1vmax;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loadStyle{
+      padding-top: 50%;
     }
 
 </style>
