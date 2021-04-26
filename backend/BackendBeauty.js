@@ -22,7 +22,6 @@ let fs = require('fs');
 
 //for web request
 let http = require('http');
-let base64 = require('base-64');
 
 //name CSV file (must have no :,- in)
 let pathName = '/StoredData/' // where the file will go
@@ -33,9 +32,15 @@ const res3 = res2.replace(/Z/g, "");
 const fileName = (pathName + "output-" + res3 + ".csv");
 //console.log(fileName);
 
+//Find IP address
+let os = require('os');
+let networkInterfaces = os.networkInterfaces();
+let IPAddress=networkInterfaces.WiFi[1].address;
+
 //open port
-let portName = process.argv[2]; //usually COM3
+let portName = process.argv[2]; //usually COM4
 let sensorPort = new ArduinoPort(portName, 9600); //set arduino baud rate to 9600
+
 
 //creating ASCII encoded data
 let readLine = ArduinoPort.parsers.Readline; // make instance of Readline parser
@@ -56,6 +61,15 @@ sensorPort.on('error', showError);
 
 //web socket function
 wss.on('connection', handleConnection);
+
+//send IP address over serial to arduino
+setTimeout(function(){sensorPort.write(IPAddress, function(err) {
+    if (err) {
+        return console.log('Error on write: ', err.message)
+    }
+    console.log(IPAddress);
+    console.log('IP written');
+});},2000); //wait so that arduino can initialise
 
 //functions to check data is being received
 //Baud rate and port should be the same as the arduino
@@ -140,19 +154,7 @@ http.createServer(function (req, res) {
         });
         return;
     }
-    else if (req.headers.hosting.length>1) {
-        res.writeHead(200, headers);
-        let IPAddress = req.headers.hosting;
-        console.log(IPAddress);
-        // sensorPort.write(IPAddress, (err) => {
-        //     if (err) {
-        //         return console.log('Error on write: ', err.message);
-        //     }
-        // });
-        res.writeHead(200, headers);
-        res.end("refresh");
-        return;
-    }
+
     console.log('nothing 2000')
 
 }).listen(2000);

@@ -24,7 +24,6 @@ export default {
     }
   },
   mounted() {
-    this.IPAddressGenerate();
   },
   methods: {
     async login() {
@@ -55,21 +54,6 @@ export default {
       const response = await res.text();
       console.log('Authenticated')
       return response;
-    },
-
-    async IPAddressGenerate() {
-      let headers = new Headers();
-      let IP=window.location;
-      headers.append('Hosting', IP);
-      let host = window.location.protocol + "//" + window.location.hostname+":2000";
-      const res = await fetch(host, {
-        method: 'GET',
-        headers: headers
-      });
-      const response = await res.text();
-      if(response==="refresh") {
-        console.log('IP address sent')
-      }
     },
   }
 }

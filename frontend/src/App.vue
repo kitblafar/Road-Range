@@ -11,7 +11,7 @@
 </template>
 
 <script>
-// import { bus } from './main'
+// When running use the command vue-cli-service serve --open to automatically open browser
 
 export default {
   name: 'App',
