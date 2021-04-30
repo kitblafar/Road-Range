@@ -43,6 +43,7 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 void setup() {
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
+
   nfc.begin();
   //begin serial connection
   Serial.begin(9600);
@@ -51,16 +52,15 @@ void setup() {
 }
 
 void loop() {
-  
+  lcd.clear();
   uint8_t success;
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
   uint8_t uidLength;                        // Length of the UID (4 or 7 bytes depending on ISO14443A card type)
   uint8_t dataLength;
   
   String address;
-  lcd.setCursor(0, 0);
   
-  if(Serial.available()){
+  if(Serial.available()>0){
    address = Serial.readString();
    //NFC
   // Wait for an NTAG203 card.  When one is found 'uid' will be populated with
@@ -78,25 +78,20 @@ void loop() {
             memset(data, 0, 4);
             success = nfc.ntag2xx_WritePage(i, data);
           }
-//       //write new data
-////       char addressArray[32];
         String addressfull=address+":8080";
         char urlArray[25];
         addressfull.toCharArray(urlArray, 26);
         url=urlArray;
         nfc.ntag2xx_WriteNDEFURI(ndefprefix, url, dataLength);
      }
+     
      //LCD
+     
      lcd.clear();
 lcd.setCursor(0, 0);
-     lcd.print(address);
+String addressToPrint=address+"    ";
+     lcd.print(addressToPrint);
 lcd.setCursor(0, 1);
-lcd.print(":8080");
+lcd.print(":8080           ");
   }
 }
-char* string2char(String command){
-    if(command.length()!=0){
-        char *p = const_cast<char*>(command.c_str());
-        return p;
-    }
-    }
