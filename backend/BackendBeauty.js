@@ -36,6 +36,11 @@ const fileName = (pathName + "output-" + res3 + ".csv");
 let os = require('os');
 let networkInterfaces = os.networkInterfaces();
 let IPAddress=networkInterfaces.WiFi[1].address;
+if (IPAddress=== undefined||IPAddress===null){
+    IPAddress=networkInterfaces["Wi-Fi"][1].address;
+}
+console.log(IPAddress);
+
 
 //open port
 let portName = process.argv[2]; //usually COM4
