@@ -76,7 +76,7 @@ setTimeout(function(){sensorPort.write(IPAddress, function(err) {
     }
     console.log(IPAddress);
     console.log('IP written');
-});},2000); //wait so that arduino can initialise
+});},3000); //wait so that arduino can initialise
 
 //functions to check data is being received
 //Baud rate and port should be the same as the arduino

@@ -16,7 +16,11 @@
  * ends to +5V and ground
  * wiper to LCD VO pin (pin 3)
  
- *LoRa and NFC share SPI pins
+ *LoRa and NFC share SPI pins 
+ *MOSI= digital pin 7
+ *SCK= digital pin 9
+ *SS= digtal pin 6
+ *MISO=digital pin 8
 
 */
 
@@ -26,10 +30,10 @@
 #include <Adafruit_PN532.h>
 
 // If using the breakout with SPI, define the pins for SPI communication.
-#define PN532_SCK  (9)
-#define PN532_MOSI (7)
-#define PN532_SS   (6)
-#define PN532_MISO (8)
+#define PN532_SCK  (10)
+#define PN532_MISO (9)
+#define PN532_MOSI (8)
+#define PN532_SS   (7)
 
 Adafruit_PN532 nfc(PN532_SCK, PN532_MISO, PN532_MOSI, PN532_SS);
 uint8_t ndefprefix = NDEF_URIPREFIX_HTTP;
