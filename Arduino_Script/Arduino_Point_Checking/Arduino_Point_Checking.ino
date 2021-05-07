@@ -5,24 +5,11 @@ void setup() {
 
 void loop() {
 
- 
- Serial.println(1);
-  delay(50);
- Serial.println(2);
-  delay(50);
- Serial.println(3);
-  delay(50);
- Serial.println(4);
-  delay(50);
- Serial.println(5);
-  delay(50);
- Serial.println(4);
-  delay(50);
- Serial.println(3);
-  delay(50);
- Serial.println(2);
-  delay(50);
- Serial.println(1);
+Serial.println(1);
+Serial.println(2);
+Serial.println(3);
+Serial.println(4);
 
-  delay(50);
-}
+ delay(50);
+ }
+ 

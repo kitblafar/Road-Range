@@ -16,9 +16,28 @@ let arduinoData = {
     datasets: [{
       data: new Array(100).fill(0),
       //put arduino data in here
-      label: "Arduino-Data",
+      label: "Speed",
       backgroundColor: 'rgba(19,17,123,0.5)'
     },
+      {
+        data: new Array(100).fill(0),
+        //put arduino data in here
+        label: "RPM1",
+        backgroundColor: 'rgba(19,255,123,0.5)'
+      },
+      {
+        data: new Array(100).fill(0),
+        //put arduino data in here
+        label: "RPM2",
+        backgroundColor: 'rgb(227, 22, 25,0.5)'
+      },
+      {
+        data: new Array(100).fill(0),
+        //put arduino data in here
+        label: "Splip",
+        backgroundColor:'rgb(191, 63, 191,0.5)'
+      },
+
     ],
   },
   options: {
@@ -69,12 +88,22 @@ export default {
     console.log("chart created");
 
     // Listen for messages
-    this.socket.addEventListener('message', (event) => {
-      // console.log('Message from server ', event.data);
-      //add data to the arduinodata.data array and the time to the label array
-      let time = Date.now() - startTime;
-      this.addData(Chart1, time, event.data);
-    });
+    let count = 0;
+          this.socket.addEventListener('message', (event) => {
+
+          // console.log('Message from server ', event.data);
+          //add data to the arduinodata.data array and the time to the label array
+          let time = Date.now() - startTime;
+
+          this.addData(Chart1, time, event.data, count);
+          count++;
+          if (count===4){
+            count=0;
+          }
+
+      });
+
+    //reset the zoom when reset zoom event received
     bus.$on("Zoom Reset1 ", () => {
       Chart1.resetZoom();
     });
@@ -100,14 +129,14 @@ export default {
       });
       return (myChart); //make the chart accessible everywhere
     },
-    addData(chart, label, data) {
+    addData(chart, label, data, x) {
       //remove x-axis from start
       chart.data.labels.shift();
       //add x-axis to end
       chart.data.labels.push(label);
       //chart.data.datasets.forEach((dataset) => { //use this when plotting multiple graphs on same axis
-      chart.data.datasets[0].data.shift(); //take data from start
-      chart.data.datasets[0].data.push(data); //add data to end
+      chart.data.datasets[x].data.shift(); //take data from start
+      chart.data.datasets[x].data.push(data); //add data to end
       //});
       chart.update();
     },
