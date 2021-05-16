@@ -35,6 +35,7 @@ const fileName = (pathName + "output-" + res3 + ".csv");
 //Find IP address
 let os = require('os');
 let networkInterfaces = os.networkInterfaces();
+console.log(networkInterfaces);
 let IPAddress;
 try {
     IPAddress = networkInterfaces["Wi-Fi"][1].address;
@@ -69,14 +70,14 @@ sensorPort.on('error', showError);
 //web socket function
 wss.on('connection', handleConnection);
 
-//send IP address over serial to arduino
+// send IP address over serial to arduino
 setTimeout(function(){sensorPort.write(IPAddress, function(err) {
     if (err) {
         return console.log('Error on write: ', err.message)
     }
     console.log(IPAddress);
     console.log('IP written');
-});},3000); //wait so that arduino can initialise
+});},2000); //wait so that arduino can initialise
 
 //functions to check data is being received
 //Baud rate and port should be the same as the arduino
@@ -88,6 +89,7 @@ function broadcastData(data) {
     // broadcast data to all webSocket clients
     if (connections.length > 0) {
         broadcast(data);
+        console.log("broadcasting...")
     }
 }
 

@@ -55,32 +55,34 @@ void setup() {
   lcd.print("Startup");
   //begin serial connection
   Serial.begin(9600);
+  
   // configure board to read RFID tags
-  nfc.SAMConfig();  
-  // put your setup code here, to run once:
-
-  //initalising the LoRa
-  mySerial.print("AT+IPR=115200\r\n");
-  mySerial.begin(115200); //Comminicate with the device.
-  delay(100);
-
-  mySerial.print("AT+MODE=0\r\n");
-  delay(100);
-
-  mySerial.print("AT+PARAMETER=10 ,7,1,7\r\n");
-  delay(100);   //wait for module to respond
-
-  mySerial.print("AT+BAND=868500000\r\n");
-  delay(100);   //wait for module to respond
-
-  mySerial.print("AT+ADDRESS=116\r\n");
-  delay(100);   //wait for module to respond
-
-  mySerial.print("AT+NETWORKID=6\r\n");
-  delay(100);   //wait for module to respond
-
-
+//  nfc.SAMConfig();  
+//  // put your setup code here, to run once:
+//
+//  //initalising the LoRa
+//  mySerial.print("AT+IPR=115200\r\n");
+//  mySerial.begin(115200); //Comminicate with the device.
+//  delay(100);
+//
+//  mySerial.print("AT+MODE=0\r\n");
+//  delay(100);
+//
+//  mySerial.print("AT+PARAMETER=10 ,7,1,7\r\n");
+//  delay(100);   //wait for module to respond
+//
+//  mySerial.print("AT+BAND=868500000\r\n");
+//  delay(100);   //wait for module to respond
+//
+//  mySerial.print("AT+ADDRESS=116\r\n");
+//  delay(100);   //wait for module to respond
+//
+//  mySerial.print("AT+NETWORKID=6\r\n");
+//  delay(100);   //wait for module to respond
+//
+//
    nfc.begin();
+   delay(50);
  lcd.clear();
  
 }
@@ -88,25 +90,24 @@ void setup() {
 void loop() {
   //repeat and repeat
   while (!Serial.available()){
-   String inString;
-   //send arduino data
-  while (mySerial.available())
-  {
+   for (float x=0; x<7;x++){
+    String v1=String(x);
+    String v2=String(x*x);
+    String v3=String(x*x);
+    String v4=String((x/7)*100);
+    Serial.println(v1+","+v2+","+v3+","+v4+",");
+    delay(100);
+   }
+     for (float x=6; x>=0;x--){
+    String v1=String(x);
+    String v2=String(x*x);
+    String v3=String(x*x);
+    String v4=String((x/7)*100);
+    Serial.println(v1+","+v2+","+v3+","+v4+",");
+    delay(100);
+   }
+  }
 
-    if (mySerial.available()) {
-      inString += String(char(mySerial.read()));
-    }
-  }
-  if (inString.length() > 0)
-  {
-    Serial.println("Recieved value is: ");
-    Serial.println(inString[11]);
-    //Slip= synchronous speed- rotational speed
-    
-//    Serial.println(Slip);
-    inString.remove(0);
-  }
-  }
   
   uint8_t success;
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
@@ -119,33 +120,33 @@ void loop() {
      lcd.print("Setting IP: ");
    address = Serial.readString();
      lcd.setCursor(12, 0);
-     lcd.print(".");
+     delay(50);
    //NFC
   // Wait for an NTAG203 card.  When one is found 'uid' will be populated with
   // the UID, and uidLength will indicate the size of the UID (normally 7)
-     success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
-     if (success){
-    nfc.PrintHex(uid, uidLength);
-    uint8_t data[32];
-    memset(data, 0, 4);
-      nfc.ntag2xx_ReadPage(3, data);
-      dataLength = data[2]*8;
-      lcd.setCursor(13, 0);
-     lcd.print(".");
-      //erase old data
-         for (uint8_t i = 4; i < (dataLength/4)+4; i++) 
-          {
-            memset(data, 0, 4);
-            success = nfc.ntag2xx_WritePage(i, data);
-          }
-        String addressfull=address+":8080";
-        char urlArray[25];
-        addressfull.toCharArray(urlArray, 26);
-        url=urlArray;
-        lcd.setCursor(14, 0);
-     lcd.print(".");
-        nfc.ntag2xx_WriteNDEFURI(ndefprefix, url, dataLength);
-     }
+//     success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
+//     if (success){
+//    nfc.PrintHex(uid, uidLength);
+//    uint8_t data[32];
+//    memset(data, 0, 4);
+//      nfc.ntag2xx_ReadPage(3, data);
+//      dataLength = data[2]*8;
+//      lcd.setCursor(13, 0);
+//     lcd.print(".");
+//      //erase old data
+//         for (uint8_t i = 4; i < (dataLength/4)+4; i++) 
+//          {
+//            memset(data, 0, 4);
+//            success = nfc.ntag2xx_WritePage(i, data);
+//          }
+//        String addressfull=address+":8080";
+//        char urlArray[25];
+//        addressfull.toCharArray(urlArray, 26);
+//        url=urlArray;
+//        lcd.setCursor(14, 0);
+//     lcd.print(".");
+//        nfc.ntag2xx_WriteNDEFURI(ndefprefix, url, dataLength);
+//     }
         //LCD
         lcd.clear();
 lcd.setCursor(0, 0);

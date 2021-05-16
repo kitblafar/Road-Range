@@ -6,7 +6,7 @@ createCSVdata();
 
 function createCSVdata() {
     for (let x = 0; x <= 4000; x++) {
-        let time = x/5 * 400;
+        let time = x;
         let a = x;
         let b = 1;
         let c = x/400 * x/400;

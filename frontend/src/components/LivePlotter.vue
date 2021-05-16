@@ -17,24 +17,28 @@ let arduinoData = {
       data: new Array(100).fill(0),
       //put arduino data in here
       label: "Speed",
+      yAxisID: "S1",
       backgroundColor: 'rgba(19,17,123,0.5)'
     },
       {
         data: new Array(100).fill(0),
         //put arduino data in here
         label: "RPM1",
+        yAxisID: "S2",
         backgroundColor: 'rgba(19,255,123,0.5)'
       },
       {
         data: new Array(100).fill(0),
         //put arduino data in here
         label: "RPM2",
+        yAxisID: "S3",
         backgroundColor: 'rgb(227, 22, 25,0.5)'
       },
       {
         data: new Array(100).fill(0),
         //put arduino data in here
         label: "Splip",
+        yAxisID: "S4",
         backgroundColor:'rgb(191, 63, 191,0.5)'
       },
 
@@ -59,14 +63,50 @@ let arduinoData = {
     },
     scales: {
       yAxes: [{
+        id: 'S1',
+        display: 'auto',
         scaleLabel: {
           display: true,
-          labelString: "Slip Percentage (%)",
+          labelString: "Speed (m/s)",
         },
+
         ticks: {
           padding: 25,
         }
-      }],
+      },
+        {
+          id: 'S2',
+          display: 'auto',
+          scaleLabel: {
+            display: true,
+            labelString: "RPM1",
+          },
+          ticks: {
+            padding: 25,
+          }
+        },
+        {
+          id: 'S3',
+          display: 'auto',
+          scaleLabel: {
+            display: true,
+            labelString: "RPM2",
+          },
+          ticks: {
+            padding: 25,
+          }
+        },
+        {
+          id: 'S4',
+          display: 'auto',
+          scaleLabel: {
+            display: true,
+            labelString: "Slip (%)",
+          },
+          ticks: {
+            padding: 25,
+          }
+        },],
       xAxes: [{
         scaleLabel: {
           display: true,
@@ -88,19 +128,16 @@ export default {
     console.log("chart created");
 
     // Listen for messages
-    let count = 0;
           this.socket.addEventListener('message', (event) => {
-
-          // console.log('Message from server ', event.data);
-          //add data to the arduinodata.data array and the time to the label array
-          let time = Date.now() - startTime;
-
-          this.addData(Chart1, time, event.data, count);
-          count++;
-          if (count===4){
-            count=0;
-          }
-
+            let time = Date.now() - startTime;
+            console.log(event.data);
+          event.data.split(",").forEach((element, index)=>{
+            //add data to the arduinodata datasets data and the time to the label array
+            this.addData(Chart1, time, element, index);
+            console.log(element);
+            console.log(index);
+                  }
+          )
       });
 
     //reset the zoom when reset zoom event received
