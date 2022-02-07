@@ -89,7 +89,6 @@ function broadcastData(data) {
     // broadcast data to all webSocket clients
     if (connections.length > 0) {
         broadcast(data);
-        console.log("broadcasting...")
     }
 }
 

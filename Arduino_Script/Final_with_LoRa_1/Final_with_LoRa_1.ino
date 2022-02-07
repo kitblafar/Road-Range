@@ -90,21 +90,21 @@ void setup() {
 void loop() {
   //repeat and repeat
   while (!Serial.available()){
-   for (float x=0; x<7;x++){
+   for (float x=0; x<30;x++){
     String v1=String(x);
     String v2=String(x*x);
     String v3=String(x*x);
     String v4=String((x/7)*100);
     Serial.println(v1+","+v2+","+v3+","+v4+",");
-    delay(100);
+    delay(9.6);
    }
-     for (float x=6; x>=0;x--){
+     for (float x=30; x>=0;x--){
     String v1=String(x);
     String v2=String(x*x);
     String v3=String(x*x);
     String v4=String((x/7)*100);
     Serial.println(v1+","+v2+","+v3+","+v4+",");
-    delay(100);
+    delay(9.6);
    }
   }
 
