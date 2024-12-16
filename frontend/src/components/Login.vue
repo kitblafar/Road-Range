@@ -27,19 +27,19 @@ export default {
   },
   methods: {
     async login() {
-      // this.response= await this.retrieveAuthentication();
-      // this.$emit("authenticated", false);
-      // if(this.input.username != "" && this.input.password != "") {
-      //   if(this.response==="true") {
+      this.response= await this.retrieveAuthentication();
+      this.$emit("authenticated", false);
+      if(this.input.username != "" && this.input.password != "") {
+        if(this.response==="true") {
           this.$emit("authenticated", true);
           this.$router.replace({ name: "Live",
             component: LivePage});
-      //   } else {
-      //     console.log("The username and / or password is incorrect");
-      //   }
-      // } else {
-      //   console.log("A username and password must be present");
-      // }
+        } else {
+          console.log("The username and / or password is incorrect");
+        }
+      } else {
+        console.log("A username and password must be present");
+      }
     },
 
     async retrieveAuthentication(){
