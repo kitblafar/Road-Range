@@ -50,7 +50,7 @@ export default {
 }
 
 .title {
-  position: center;
+  position: relative;
   padding-top: 3%;
   font-size: x-large;
   font-weight: bolder;
